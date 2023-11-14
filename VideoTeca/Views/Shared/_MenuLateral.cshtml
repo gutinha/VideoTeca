@@ -1,0 +1,63 @@
+﻿<ul class="navbar-nav  sidebar bg-light accordion border-right" id="accordionSidebar">
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="@Url.Action("Index","Home")">
+        <div class="sidebar-brand-icon ">
+            <img style="width: 35px; height: auto" src="https://www.unitins.br/uniPerfil/Logomarca/Imagem/5b98288311bfe57cfb710d848f1d7fef" />
+        </div>
+        <div class="sidebar-brand-text mx-3">
+            <img style="width: 100%; height: auto" src="https://www.unitins.br/uniPerfil/Logomarca/Imagem/09997c779523a61bd01bb69b0a789242" />
+        </div>
+    </a>
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Index","Home")">
+            <i class="fas fa-fw fa-home"></i>
+            <span>Página Inicial</span>
+        </a>
+    </li>
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+
+   
+       
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse(menuPai.IdMenu)" aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw menuPai.ClasseIcone"></i>
+                    <span>menuPai.Nome</span>
+                </a>
+
+                <div id="collapse(menuPai.IdMenu)" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        
+                            <a class="collapse-item" href="Url.Action(menuFilho.Action, menuFilho.Controller)">
+                                <i class="fas fa-fw menuFilho.ClasseIcone" style="color: #3a3b45;"></i>
+                                <span>menuFilho.Nome</span>
+                            </a>
+                        
+                    </div>
+                </div>
+            </li>
+     
+           
+            <li class="nav-item">
+                <a class="nav-link" href="">
+                    <i class="fas fa-fw menuPai.ClasseIcone"></i>
+                    <span>menupai.Nome</span>
+                </a>
+            </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+</ul>
+
+<style>
+    .sidebar .nav-item .nav-link {
+        color: #495057;
+    }
+</style>

@@ -1,0 +1,151 @@
+﻿﻿
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" type="image/png" href="https://www.unitins.br/Uniperfil/Upload/da2c288f8dc21c685081ef337c37f3b4.ico" />
+    <title>VideoTeca - @ViewBag.Title</title>
+
+    <link href="~/Content/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/lib/fontawesome/css/all.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="~/Content/css/sb-admin-2.css" rel="stylesheet" />
+    <link href="~/Content/lib/toastr/toastr.min.css" rel="stylesheet" />
+    <link href="~/Content/pageHome/lib/bootstrap-datepicker/css/bootstrap-datepicker3.css" rel="stylesheet" />
+    @RenderSection("head", required: false)
+    <style>
+
+        #sistemas .dropdown-menu {
+            height: 500px;
+            overflow-y: auto;
+        }
+
+        .creditos-desenvolvimento {
+            background: #2D89EF;
+            color: #FFF;
+            font-size: 11px;
+            padding-right: 10px;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        @@media (min-width: 768px) {
+            .sidebar.toggled .sidebar-brand .sidebar-brand-icon {
+                display: block;
+            }
+
+            .sidebar .sidebar-brand .sidebar-brand-icon {
+                display: none;
+            }
+        }
+    </style>
+    @RenderSection("css", false)
+    @RenderSection("styles", false)
+</head>
+<body id="page-top">
+    <div id="wrapper">
+        @RenderPage("~/Views/Shared/_Menulateral.cshtml")
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                @RenderPage("~/Views/Shared/_MenuSuperior.cshtml")
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+            </div>
+            @RenderPage("~/Views/Shared/_Rodape.cshtml")
+        </div>
+    </div>
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+    <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+
+        </div>
+    </div>
+
+
+    <script src="~/Content/lib/jquery/jquery.min.js"></script>
+    <script src="~/Content/lib/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="~/Content/js/sb-admin-2.js"></script>
+    <script src="~/Content/lib/toastr/toastr.min.js"></script>
+    <script src="~/Content/pageHome/lib/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/Content/pageHome/lib/bootstrap-datepicker/bootstrap-datepicker.pt-BR.min.js"></script>
+    <script src="~/Content/lib/fontawesome/js/all.js"></script>
+    <script src="~/Content/js/select2.min.js"></script>
+    <script src="~/Content/js/jquery.mask.min.js"></script>
+    <script src="~/Scripts/bootstrap3-typeahead.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).on('click', '.abrir-modal', function () {
+            $('#myModal').empty().load($(this).data('href'), function () {
+                $('#myModal').modal('show');
+
+            });
+        });
+        function adicionarNotificacao(texto, sucesso) {
+            if (sucesso) {
+                toastr.success(texto, 'Sucesso', {
+                    "closeButton": true,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": true,
+                    "positionClass": "toast-top-right",
+                    "preventDuplicates": false,
+                    "onclick": null,
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                });
+
+            } else {
+                toastr.error(texto, 'Erro', {
+                    "closeButton": true,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": true,
+                    "positionClass": "toast-top-right",
+                    "preventDuplicates": false,
+                    "onclick": null,
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                });
+            }
+        };
+
+        @if(TempData["s"] != null) {
+            @Html.Raw(string.Format("adicionarNotificacao('{0}', true);", TempData["s"]))
+        }
+        @if(TempData["e"] != null) {
+            @Html.Raw(string.Format("adicionarNotificacao('{0}', false);", TempData["e"]))
+        }
+
+        $(window).bind("load resize", function() {
+            topOffset = 70;
+
+            height = ((this.window.innerHeight > 0) ? this.window.innerHeight : this.screen.height) - 1;
+            height = height - topOffset;
+            if (height < 1) height = 1;
+            if (height > topOffset) {
+                $("#content-wrapper").css("min-height", (height+71) + "px");
+            }
+        });
+    </script>
+    @RenderSection("js", false)
+    @RenderSection("scripts", required: false)
+</body>
+</html>
