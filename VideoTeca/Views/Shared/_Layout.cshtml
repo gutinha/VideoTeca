@@ -14,9 +14,14 @@
     <link href="~/Content/css/sb-admin-2.css" rel="stylesheet" />
     <link href="~/Content/lib/toastr/toastr.min.css" rel="stylesheet" />
     <link href="~/Content/pageHome/lib/bootstrap-datepicker/css/bootstrap-datepicker3.css" rel="stylesheet" />
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/vidstack@1.0.0/player/styles/default/theme.min.css" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/vidstack@1.0.0/player/styles/default/layouts/video.min.css" />
+
     @RenderSection("head", required: false)
     <style>
-
         #sistemas .dropdown-menu {
             height: 500px;
             overflow-y: auto;
@@ -65,6 +70,9 @@
 
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vidstack@1.0.0/cdn/with-layouts/vidstack.js"
+            type="module"></script>
 
 
     <script src="~/Content/lib/jquery/jquery.min.js"></script>
