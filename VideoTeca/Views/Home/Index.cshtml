@@ -2,108 +2,71 @@
     ViewBag.Title = "Início";
 }
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
-                <div class="video">
-                    <div class="thumbnail">
-                        <media-player title="Sprite Fight" src="https://www.youtube.com/watch?v=Ucyx_QPfDng">
-                            <media-provider></media-provider>
-                            <media-video-layout thumbnails="https://image.mux.com/VZtzUzGRv02OhRnZCxcNg49OilvolTqdnFLEqBsTwaxU/storyboard.vtt"></media-video-layout>
-                        </media-player>
-                    </div>
-                    <div class="detalhes">
-                        <div class="titulo">
-                            <h3>Titulo</h3>
-                            <p>Quem enviou</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="container mb-5">
+    <div class="text-center mt-5">
+        <h1> <strong>Videoteca</strong></h1>
+    </div>
 
-            <div class="col">
-                <div class="video">
-                    <div class="thumbnail">
-                        <iframe width="315" height="177" src="https://www.youtube.com/embed/aR7CKNFECx0?si=eYNqDsFCGt9oWjEv" title="YouTube video player" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope" allowfullscreen></iframe>
-                    </div>
-                    <div class="detalhes">
-                        <div class="titulo">
-                            <h3>Titulo 2</h3>
-                            <p>Quem enviou 2</p>
-                        </div>
-                    </div>
+    <div class="text-justify mt-5">
+        <h2>Com a videoteca, os estudantes poderão assistir aulas exclusivas e avaliadas pela nossa curadoria, trazendo sempre o melhor conteúdo para você.</h2>
+    </div>
+    
+    <div class="row row-cols-1 row-cols-md-3">
+        <div class="col mt-5">
+            <div class="card border-0 shadow h-100">
+                <div class="card-header text-white bg-primary">Listagem de videos</div>
+                <div class="card-body ">
+                    <p class="card-text" style="text-align: justify;">
+                        Módulo destinado a listagem de videos.
+                    </p>
                 </div>
-            </div>
-            <div class="col">
-                <div class="video">
-                    <div class="thumbnail">
-                        <iframe width="315" height="177" src="https://www.youtube.com/embed/wNaoX6VOj54?si=EvpfF0Q8jNLt-W7d" title="YouTube video player" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope" allowfullscreen></iframe>
-                    </div>
-                    <div class="detalhes">
-                        <div class="titulo">
-                            <h3>Titulo 3</h3>
-                            <p>Quem enviou 3</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="video">
-                    <div class="thumbnail">
-                        <iframe width="315" height="177" src="https://www.youtube.com/embed/jFI-qqitzwk?si=9B82SvLruDBYE8z4" title="YouTube video player" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope" allowfullscreen></iframe>
-                    </div>
-                    <div class="detalhes">
-                        <div class="titulo">
-                            <h2>Titulo 4</h2>
-                            <p>Quem enviou 4</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="video">
-                    <div class="thumbnail">
-                        <iframe width="315" height="177" src="https://www.youtube.com/embed/LV2243j4RTQ?si=qx_hRCIbrWuDtXFr" title="YouTube video player" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope" allowfullscreen></iframe>
-                    </div>
-                    <div class="detalhes">
-                        <div class="titulo">
-                            <h3>Titulo 5</h3>
-                            <p>Quem enviou 5</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="video">
-                    <div class="thumbnail">
-                        <iframe width="315" height="177" src="https://www.youtube.com/embed/g2x9oyBFSco?si=kx1GP7odtXA6L3tq" title="YouTube video player" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope" allowfullscreen></iframe>
-                    </div>
-                    <div class="detalhes">
-                        <div class="titulo">
-                            <h3>Titulo 6</h3>
-                            <p>Quem enviou 6</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="video">
-                    <div class="thumbnail">
-                        <iframe width="315" height="177" src="https://www.youtube.com/embed/6i-_R5cAcEc?si=foFmKp3vIqd26qv_" title="YouTube video player" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope" allowfullscreen></iframe>
-                    </div>
-                    <div class="detalhes">
-                        <div class="titulo">
-                            <h3>Titulo 7</h3>
-                            <p>Quem enviou 7</p>
-                        </div>
-                    </div>
+                <div class="card-footer">
+                    <a href="@Url.Action("ListarVideos", "Home")" class="stretched-link text-decoration-none"><i class="fas fa-award fa-fw"></i> <strong>Acesso aos videos</strong></a>
                 </div>
             </div>
         </div>
+
+        <div class="col mt-5">
+            <div class="card border-0 shadow h-100">
+                <div class="card-header text-white bg-primary">Avalie os videos</div>
+                <div class="card-body ">
+                    <p class="card-text" style="text-align: justify;">
+                        Módulo destinado ao professor avaliador, onde ele irá avaliar os videos.
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <a href="@Url.Action("ListarVideos", "Home")" class="stretched-link text-decoration-none"><i class="fas fa-award fa-fw"></i> <strong>Acesso aos videos</strong></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col mt-5">
+            <div class="card border-0 shadow h-100">
+                <div class="card-header text-white bg-primary">Envie seu video</div>
+                <div class="card-body ">
+                    <p class="card-text" style="text-align: justify;">
+                        Módulo destinado aos professores que desejam ter seu conteúdo/video em nossa plataforma.
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <a href="@Url.Action("ListarVideos", "Home")" class="stretched-link text-decoration-none"><i class="fas fa-award fa-fw"></i> <strong>Acesso ao formulário</strong></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col mt-5">
+            <div class="card border-0 shadow h-100">
+                <div class="card-header text-white bg-primary">Coordenador</div>
+                <div class="card-body ">
+                    <p class="card-text" style="text-align: justify;">
+                        Módulo destinado ao coordenador do projeto.
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <a href="@Url.Action("ListarVideos", "Home")" class="stretched-link text-decoration-none"><i class="fas fa-award fa-fw"></i> <strong>Acesso</strong></a>
+                </div>
+            </div>
+        </div>
+
     </div>
+</div>

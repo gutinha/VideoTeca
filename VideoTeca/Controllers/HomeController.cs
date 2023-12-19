@@ -26,5 +26,10 @@ namespace VideoTeca.Controllers
 
             return View();
         }
+
+        public ActionResult ListarVideos()
+        {
+           return View();
+        }
     }
 }

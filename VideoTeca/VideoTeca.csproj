@@ -166,6 +166,7 @@
     <Content Include="Views\Shared\_MenuLateral.cshtml" />
     <Content Include="Views\Shared\_Rodape.cshtml" />
     <Content Include="Views\Shared\_MenuSuperior.cshtml" />
+    <Content Include="Views\Home\ListarVideos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
