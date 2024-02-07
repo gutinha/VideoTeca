@@ -33,7 +33,7 @@ namespace VideoTeca.Controllers
 
         public ActionResult ListarVideos()
         {
-           ViewBag.videos = db.video.ToList();
+           ViewBag.videos = db.video.Where(x=> x.active == true).ToList();
            return View();
         }
     }

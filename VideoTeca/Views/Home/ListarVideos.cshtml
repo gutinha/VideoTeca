@@ -4,31 +4,74 @@
     List<video> videos = ViewBag.videos;
 }
 
-<div class="container-fluid">
-    <div class="">
-    </div>
-    <div class="row">
-
-        @foreach (var video in videos)
-        {
-            <div class="col">
-                <div class="video">
-
-                    <div class="thumbnail">
-                        <iframe width="315" height="177" src="@video.url"
-                                title="YouTube video player" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowfullscreen></iframe>
-                    </div>
-                    <div class="detalhes">
-                        <div class="titulo">
-                            <h3>@video.titulo</h3>
-                            <p>Enviado por: @video.enviadoPor</p>
-                        </div>
-                    </div>
-                </div>
+<form id="filtros-pesquisa">
+    <div class="row gx-2 mb-5">
+        <div class="col-12 col-lg-5">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInputTitulo" placeholder="Título ou Palavras-Chave">
+                <label for="floatingInputTitulo">Pesquisar por Título ou Palavras-Chave</label>
             </div>
-         }
         </div>
+
+        <div class="col-5 col-lg-3">
+            <div class="form-floating">
+                <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                    <option selected hidden></option>
+                    <option value="1">Um</option>
+                    <option value="2">Dois</option>
+                    <option value="3">Três</option>
+                </select>
+                <label for="floatingSelect">Filtro 1</label>
+            </div>
+        </div>
+
+        <div class="col-5 col-lg-3">
+            <div class="form-floating">
+                <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                    <option selected hidden></option>
+                    <option value="1">Quatro</option>
+                    <option value="2">Cinco</option>
+                    <option value="3">Seis</option>
+                </select>
+                <label for="floatingSelect">Filtro 2</label>
+            </div>
+        </div>
+
+        <div class="col-2 col-lg-1">
+            <div class="d-grid gap-0">
+                <button type="submit" class="btn btn-primary" style="height: 58px;">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="row row-cols-2 row-cols-lg-4">
+
+    @foreach (var video in videos)
+    {
+        <!-- Modelo de Coluna para exibir os vídeos -->
+        <div class="col mb-5">
+            <video id="@video.id"
+                   class="video-js ratio ratio-16x9 rounded-3 mb-2"
+                   controls
+                   preload="auto"
+                   width="640"
+                   height="240"
+                   poster=""
+                   data-setup='{"techOrder": ["youtube"], "sources": [{ "type": "video/youtube", "src": "@video.url"}] }'>
+                <p class="vjs-no-js">
+                    To view this video please enable JavaScript, and consider upgrading to a
+                    web browser that
+                    <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                </p>
+            </video>
+            <div class="detalhes">
+                <div class="fw-bold lh-1 mb-2">@video.titulo</div>
+                <div>Enviado por: @video.enviadoPor</div>
+            </div>
+        </div>
+    }
 </div>
 

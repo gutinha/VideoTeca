@@ -22,7 +22,11 @@ namespace VideoTeca.Models
         [Required]
         [StringLength(100)]
         public string descricao { get; set; }
+
         [StringLength(255)]
         public string enviadoPor { get; set; }
+
+        [Required]
+        public bool active { get; set; }
     }
 }

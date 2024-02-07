@@ -8,17 +8,16 @@
     <link rel="shortcut icon" type="image/png" href="https://www.unitins.br/Uniperfil/Upload/da2c288f8dc21c685081ef337c37f3b4.ico" />
     <title>VideoTeca - @ViewBag.Title</title>
 
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+    <!-- If you'd like to support IE8 (for Video.js versions prior to v7) -->
+     <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
+
     <link href="~/Content/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Content/lib/fontawesome/css/all.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link href="~/Content/css/sb-admin-2.css" rel="stylesheet" />
     <link href="~/Content/lib/toastr/toastr.min.css" rel="stylesheet" />
     <link href="~/Content/pageHome/lib/bootstrap-datepicker/css/bootstrap-datepicker3.css" rel="stylesheet" />
-
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/vidstack@1.0.0/player/styles/default/theme.min.css" />
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/vidstack@1.0.0/player/styles/default/layouts/video.min.css" />
 
     @RenderSection("head", required: false)
     <style>
@@ -71,9 +70,6 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/vidstack@1.0.0/cdn/with-layouts/vidstack.js"
-            type="module"></script>
-
     <script src="~/Content/lib/jquery/jquery.min.js"></script>
     <script src="~/Content/lib/bootstrap/js/bootstrap.bundle.js"></script>
     <script src="~/Content/js/sb-admin-2.js"></script>
@@ -85,6 +81,9 @@
     <script src="~/Content/js/jquery.mask.min.js"></script>
     <script src="~/Scripts/bootstrap3-typeahead.min.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+    <script src="~/Content/lib/video-js-youtube/Youtube.min.js"></script>
 
     <script type="text/javascript">
         $(document).on('click', '.abrir-modal', function () {
