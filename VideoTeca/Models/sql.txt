@@ -1,0 +1,46 @@
+﻿-- DROP SCHEMA dbo;
+
+CREATE SCHEMA dbo;
+-- videoteca.dbo.area definition
+
+-- Drop table
+
+-- DROP TABLE videoteca.dbo.area;
+
+CREATE TABLE videoteca.dbo.area (
+	id bigint IDENTITY(0,1) NOT NULL,
+	nome nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	CONSTRAINT area_pk PRIMARY KEY (id)
+);
+
+
+-- videoteca.dbo.video definition
+
+-- Drop table
+
+-- DROP TABLE videoteca.dbo.video;
+
+CREATE TABLE videoteca.dbo.video (
+	id bigint IDENTITY(0,1) NOT NULL,
+	url nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	titulo nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	descricao nvarchar(4000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	enviadoPor nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	active bit DEFAULT 1 NOT NULL,
+	CONSTRAINT video_pk PRIMARY KEY (id)
+);
+
+
+-- videoteca.dbo.subarea definition
+
+-- Drop table
+
+-- DROP TABLE videoteca.dbo.subarea;
+
+CREATE TABLE videoteca.dbo.subarea (
+	id bigint IDENTITY(0,1) NOT NULL,
+	nome nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	id_area bigint NOT NULL,
+	CONSTRAINT subarea_pk PRIMARY KEY (id),
+	CONSTRAINT subarea_area_FK FOREIGN KEY (id_area) REFERENCES videoteca.dbo.area(id)
+);
