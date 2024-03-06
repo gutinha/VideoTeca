@@ -130,8 +130,10 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Models\area.cs" />
     <Compile Include="Controllers\ProfessorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Models\subarea.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

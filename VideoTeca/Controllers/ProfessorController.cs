@@ -14,7 +14,16 @@ namespace VideoTeca.Controllers
 
         public ActionResult Index()
         {
+            ViewBag.Areas = db.area.ToList();
             return View();
         }
+
+        public ActionResult BuscarSubArea(int id)
+        {
+            var subAreas = db.subarea.Where(x => x.id_area == id).ToList().Select(a => new { Id = a.id, Nome = a.nome });
+            return Json(subAreas, JsonRequestBehavior.AllowGet);
+        }
+
+
     }
 }

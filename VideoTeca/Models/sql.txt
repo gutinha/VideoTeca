@@ -44,3 +44,18 @@ CREATE TABLE videoteca.dbo.subarea (
 	CONSTRAINT subarea_pk PRIMARY KEY (id),
 	CONSTRAINT subarea_area_FK FOREIGN KEY (id_area) REFERENCES videoteca.dbo.area(id)
 );
+
+INSERT INTO videoteca.dbo.video (url,titulo,descricao,enviadoPor,active) VALUES
+	 ('https://www.youtube.com/watch?v=pscwcTZgCGU','Curso POO Teoria #04a - Métodos Especiais','testando','Curso em video',1),
+	 ('https://www.youtube.com/watch?v=KlIL63MeyMY','POO #1','Video introdutório de POO em java','Curso em video',1),
+	 ('https://www.youtube.com/watch?v=Ucyx_QPfDng','Curso POO Java #01b - Instalando o JDK e NetBeans','aaaaaaa','Curso em video',1),
+	 ('https://www.youtube.com/watch?v=aR7CKNFECx0','Curso POO Teoria #02a - O que é um Objeto?','Video introdutório de POO em java','Curso em video',1),
+	 ('https://www.youtube.com/watch?v=wNaoX6VOj54','Curso POO Java #02b - Criando Classes e Objetos em Java','Video introdutório de POO em java','Curso em video',1),
+	 ('https://www.youtube.com/watch?v=jFI-qqitzwk','Curso POO Teoria #03a - O que é Visibilidade em um Objeto?','Video introdutório de POO em java','Curso em video',1);
+
+INSERT INTO videoteca.dbo.area (id,nome) VALUES
+	 (0,'Informática'),
+	 (1,'Matemática');
+
+INSERT INTO videoteca.dbo.subarea (nome,id_area) VALUES
+	 ('Lógica de programação',0);

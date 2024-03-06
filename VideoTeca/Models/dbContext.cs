@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
+using VideoTeca.Controllers;
 
 namespace VideoTeca.Models
 {
@@ -13,9 +14,16 @@ namespace VideoTeca.Models
         }
 
         public virtual DbSet<video> video { get; set; }
+        public virtual DbSet<area> area { get; set; }
+        public virtual DbSet<subarea> subarea { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<area>()
+               .HasMany(e => e.subarea)
+               .WithRequired(e => e.area)
+               .HasForeignKey(e => e.id_area)
+               .WillCascadeOnDelete(false);
         }
     }
 }
