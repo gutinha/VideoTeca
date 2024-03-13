@@ -20,13 +20,13 @@ namespace VideoTeca.Models
         public string titulo { get; set; }
 
         [Required]
-        [StringLength(100)]
+        [StringLength(4000)]
         public string descricao { get; set; }
 
-        [StringLength(255)]
-        public string enviadoPor { get; set; }
-
-        [Required]
         public bool active { get; set; }
+
+        public long enviadoPor { get; set; }
+
+        public virtual usuario usuario { get; set; }
     }
 }

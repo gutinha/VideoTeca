@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Videos";
     List<video> videos = ViewBag.videos;
+    List<area> areas = ViewBag.Areas;
 }
 
 <form id="filtros-pesquisa">
@@ -15,25 +16,23 @@
 
         <div class="col-5 col-lg-3">
             <div class="form-floating">
-                <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                <select class="form-select" id="floatingSelect1" aria-label="Floating label select example">
                     <option selected hidden></option>
-                    <option value="1">Um</option>
-                    <option value="2">Dois</option>
-                    <option value="3">Três</option>
+                    @foreach (var area in ViewBag.Areas)
+                    {
+                        <option value="@area.id">@area.nome</option>
+                    }
                 </select>
-                <label for="floatingSelect">Filtro 1</label>
+                <label for="floatingSelect">Área</label>
             </div>
         </div>
 
         <div class="col-5 col-lg-3">
             <div class="form-floating">
-                <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                <select class="form-select" id="floatingSelect" aria-label="Floating label select example" disabled="">
                     <option selected hidden></option>
-                    <option value="1">Quatro</option>
-                    <option value="2">Cinco</option>
-                    <option value="3">Seis</option>
                 </select>
-                <label for="floatingSelect">Filtro 2</label>
+                <label for="floatingSelect">Subárea</label>
             </div>
         </div>
 
@@ -69,9 +68,45 @@
             </video>
             <div class="detalhes">
                 <div class="fw-bold lh-1 mb-2">@video.titulo</div>
-                <div>Enviado por: @video.enviadoPor</div>
+                <div>Enviado por: @video.usuario.nome</div>
             </div>
         </div>
     }
 </div>
+
+@section Scripts {
+    <script>
+
+        function BuscarSubArea() {
+    var areaId = $('#floatingSelect1').val();
+    $.ajax({
+        dataType: "json",
+        method: "POST",
+        url: "@Url.Action("BuscarSubArea", "Home")",
+        data: { id: areaId },
+    }).done(function (data) {
+        var select = $("#floatingSelect");
+        select.empty();
+        select.append($('<option>', { value: '', text: 'Escolha uma Subárea' }));
+
+
+        data.forEach(function (item) {
+            select.append($('<option>', {
+                value: item.Id,
+                text: item.Nome
+            }));
+        });
+
+        select.prop('disabled', false);
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        console.error('Erro na chamada AJAX: ' + textStatus);
+    });
+}
+
+
+        $('#floatingSelect1').on("change", function (event) {
+            BuscarSubArea();
+        });
+    </script>
+}
 

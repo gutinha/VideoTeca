@@ -137,6 +137,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\usuario.cs" />
     <Compile Include="Models\Util.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\dbContext.cs" />
@@ -5633,6 +5634,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Models\permissoes.txt" />
     <Content Include="Models\sql.txt" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -5989,6 +5991,8 @@
     <Content Include="Views\Shared\_MenuSuperior.cshtml" />
     <Content Include="Views\Home\ListarVideos.cshtml" />
     <Content Include="Views\Professor\Index.cshtml" />
+    <Content Include="Views\Professor\EnviarVideo.cshtml" />
+    <Content Include="Views\Home\CriarConta.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,19 +1,20 @@
-﻿@{
-    ViewBag.Title = "Index";
-    List<VideoTeca.Models.area> areas = ViewBag.Areas;
+﻿@using VideoTeca.Models
+@{
+    ViewBag.Title = "Enviar video";
+    List<area> areas = ViewBag.Areas;
 }
 
 <form method="post" id="myForm">
     <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="floatingInputTitulo" placeholder="Título ou Palavras-Chave" required="">
+        <input type="text" class="form-control" id="floatingInputTitulo" placeholder="Título ou Palavras-Chave">
         <label for="floatingInputTitulo">Título:</label>
     </div>
-    <div class="form-floating mb-3">
-        <textarea class="form-control" placeholder="Descrição" id="floatingTextarea" style="height: 100px"></textarea>
-        <label for="floatingTextarea">Descrição</label>
+    <div class="form-group">
+        <label for="floatingInputDescricao">Descrição:</label>
+        <textarea class="form-control" id="descricao" name="descricao" maxlength="4000"></textarea>
     </div>
     <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="floatingInputLink" placeholder="Link do video" required="">
+        <input type="text" class="form-control" id="floatingInputLink" placeholder="Link do video">
         <label for="floatingInputLink">Link do video:</label>
     </div>
     <div class="row gx-2 mb-5">
@@ -64,7 +65,7 @@
         select.empty();
         select.append($('<option>', { value: '', text: 'Escolha uma Subárea' }));
 
-
+        
         data.forEach(function (item) {
             select.append($('<option>', {
                 value: item.Id,
@@ -72,7 +73,7 @@
             }));
         });
 
-        select.prop('disabled', false);
+        select.prop('disabled', false); 
     }).fail(function (jqXHR, textStatus, errorThrown) {
         console.error('Erro na chamada AJAX: ' + textStatus);
     });
