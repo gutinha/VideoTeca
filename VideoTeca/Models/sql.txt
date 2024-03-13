@@ -53,9 +53,9 @@ INSERT INTO videoteca.dbo.video (url,titulo,descricao,enviadoPor,active) VALUES
 	 ('https://www.youtube.com/watch?v=wNaoX6VOj54','Curso POO Java #02b - Criando Classes e Objetos em Java','Video introdutório de POO em java','Curso em video',1),
 	 ('https://www.youtube.com/watch?v=jFI-qqitzwk','Curso POO Teoria #03a - O que é Visibilidade em um Objeto?','Video introdutório de POO em java','Curso em video',1);
 
-INSERT INTO videoteca.dbo.area (id,nome) VALUES
-	 (0,'Informática'),
-	 (1,'Matemática');
+INSERT INTO videoteca.dbo.area (nome) VALUES
+	 ('Informática'),
+	 ('Matemática');
 
 INSERT INTO videoteca.dbo.subarea (nome,id_area) VALUES
 	 ('Lógica de programação',0);

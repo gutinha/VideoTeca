@@ -5,15 +5,15 @@
 
 <form method="post" id="myForm">
     <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="floatingInputTitulo" placeholder="Título ou Palavras-Chave">
+        <input type="text" class="form-control" id="floatingInputTitulo" placeholder="Título ou Palavras-Chave" required="">
         <label for="floatingInputTitulo">Título:</label>
     </div>
-    <div class="form-group">
-        <label for="floatingInputDescricao">Descrição:</label>
-        <textarea class="form-control" id="descricao" name="descricao"></textarea>
+    <div class="form-floating mb-3">
+        <textarea class="form-control" placeholder="Descrição" id="floatingTextarea" style="height: 100px"></textarea>
+        <label for="floatingTextarea">Descrição</label>
     </div>
     <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="floatingInputLink" placeholder="Link do video">
+        <input type="text" class="form-control" id="floatingInputLink" placeholder="Link do video" required="">
         <label for="floatingInputLink">Link do video:</label>
     </div>
     <div class="row gx-2 mb-5">
