@@ -9,6 +9,12 @@ namespace VideoTeca.Models
     [Table("subarea")]
     public partial class subarea
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public subarea()
+        {
+            video = new HashSet<video>();
+        }
+
         public long id { get; set; }
 
         [Required]
@@ -18,5 +24,8 @@ namespace VideoTeca.Models
         public long id_area { get; set; }
 
         public virtual area area { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<video> video { get; set; }
     }
 }

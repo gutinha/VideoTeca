@@ -133,6 +133,7 @@
     <Compile Include="Models\area.cs" />
     <Compile Include="Controllers\ProfessorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Models\status.cs" />
     <Compile Include="Models\subarea.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -5993,6 +5994,7 @@
     <Content Include="Views\Professor\Index.cshtml" />
     <Content Include="Views\Professor\EnviarVideo.cshtml" />
     <Content Include="Views\Home\CriarConta.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

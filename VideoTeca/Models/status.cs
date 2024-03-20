@@ -6,13 +6,11 @@ namespace VideoTeca.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("area")]
-    public partial class area
+    public partial class status
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public area()
+        public status()
         {
-            subarea = new HashSet<subarea>();
             video = new HashSet<video>();
         }
 
@@ -21,9 +19,6 @@ namespace VideoTeca.Models
         [Required]
         [StringLength(255)]
         public string nome { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<subarea> subarea { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<video> video { get; set; }

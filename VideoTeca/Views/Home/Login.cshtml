@@ -1,0 +1,29 @@
+﻿@model VideoTeca.Models.usuario
+@{
+    ViewBag.Title = "Fazer Login";
+}
+
+<h2>Login:</h2>
+
+
+
+@using (Html.BeginForm("Login", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "loginUsuario", autocomplete = "on" }))
+{
+    <div class="form-floating mb-3">
+        <input id="floatingInputnome" name="login" type="text" placeholder="Digite seu email" class="form-control" required="required" />
+        <label for="floatingInputnome">Email:</label>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input id="password" name="password" type="password" placeholder="Digite sua senha" class="form-control" required="required" />
+        <label for="password" class="control-label">Senha:</label>
+    </div>
+
+    <br />
+    <a id="btn" href="@Url.Action("CriarConta", "Home")" class="btn btn-info">Criar conta</a>
+    <a id="btn-back" href="@Url.Action("Index", "Home")" class="btn btn-info">Voltar</a>
+    <button type="submit" class="btn btn-success" id="btnEnvia" name="btnEnvia">
+        <span class="fa fa-save fa-w-2"></span>&nbsp;&nbsp;Entrar
+    </button>
+
+}

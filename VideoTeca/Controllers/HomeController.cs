@@ -43,6 +43,31 @@ namespace VideoTeca.Controllers
             return View();
         }
 
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Login(FormCollection formulario)
+        {
+            var login = formulario["login"];
+            var password = formulario["password"];
+            password = Util.hash(password);
+            var usuario = db.usuario.Where(u => u.login.Equals(login) && u.password.Equals(password)).FirstOrDefault();
+
+            if (usuario == null)
+            {
+                TempData["e"] = "Email ou senha incorretos!";
+                return RedirectToAction("Login", "Home");
+            }
+
+            Session["id_user"] = usuario.id.ToString();
+            TempData["s"] = "Login realizado com sucesso!";
+            return RedirectToAction("Index", "Home");
+
+        }
+
         [HttpPost]
         public ActionResult CriarConta(FormCollection formulario)
         {
