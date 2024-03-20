@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Data.Odbc;
 using System.Linq;
 using System.Web;
@@ -150,7 +151,6 @@ namespace VideoTeca.Controllers
                     video video = new video
                     {
                         titulo = titulo,
-                        descricao = descricao,
                         url = url,
                         id_area = area,
                         enviadoPor = userLogado,
@@ -161,9 +161,26 @@ namespace VideoTeca.Controllers
                     {
                         video.id_subarea = subarea;
                     }
+                    if (!string.IsNullOrEmpty(descricao))
+                    {
+                        video.descricao = descricao;
+                    }
                     db.video.Add(video);
                     db.SaveChanges();
                     transaction.Commit();
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    // Loop através dos erros de validação para obter detalhes
+                    foreach (var entityValidationError in ex.EntityValidationErrors)
+                    {
+                        foreach (var validationError in entityValidationError.ValidationErrors)
+                        {
+                            TempData["e"] = validationError.PropertyName + " Error: "+ validationError.ErrorMessage;
+                            Console.WriteLine("Property: " + validationError.PropertyName + " Error: " + validationError.ErrorMessage);
+                        }
+                    }
+                    return RedirectToAction("Index", "Professor");
                 }
                 catch (Exception ex)
                 {
@@ -172,7 +189,6 @@ namespace VideoTeca.Controllers
                     return RedirectToAction("Index", "Professor");
                 }
             }
-
             TempData["s"] = "Video enviado com sucesso! Aguarde um avaliador aprovar seu video.";
             return RedirectToAction("Index", "Professor");
         }

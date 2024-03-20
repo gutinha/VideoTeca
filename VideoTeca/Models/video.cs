@@ -19,7 +19,6 @@ namespace VideoTeca.Models
         [StringLength(255)]
         public string titulo { get; set; }
 
-        [Required]
         [StringLength(4000)]
         public string descricao { get; set; }
 
