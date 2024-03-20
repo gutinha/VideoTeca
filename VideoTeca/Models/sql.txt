@@ -14,20 +14,34 @@ CREATE TABLE videoteca.dbo.area (
 );
 
 
--- videoteca.dbo.video definition
+-- videoteca.dbo.usuario definition
 
 -- Drop table
 
--- DROP TABLE videoteca.dbo.video;
+-- DROP TABLE videoteca.dbo.usuario;
 
-CREATE TABLE videoteca.dbo.video (
+CREATE TABLE videoteca.dbo.usuario (
 	id bigint IDENTITY(0,1) NOT NULL,
-	url nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	titulo nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	descricao nvarchar(4000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	enviadoPor nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	nome nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[login] nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	password nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	permission bigint DEFAULT 1 NOT NULL,
 	active bit DEFAULT 1 NOT NULL,
-	CONSTRAINT video_pk PRIMARY KEY (id)
+	CONSTRAINT usuario_pk PRIMARY KEY (id),
+	CONSTRAINT usuario_unique UNIQUE ([login])
+);
+
+
+-- videoteca.dbo.status definition
+
+-- Drop table
+
+-- DROP TABLE videoteca.dbo.status;
+
+CREATE TABLE videoteca.dbo.status (
+	id bigint IDENTITY(0,1) NOT NULL,
+	nome nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	CONSTRAINT status_pk PRIMARY KEY (id)
 );
 
 
@@ -43,6 +57,30 @@ CREATE TABLE videoteca.dbo.subarea (
 	id_area bigint NOT NULL,
 	CONSTRAINT subarea_pk PRIMARY KEY (id),
 	CONSTRAINT subarea_area_FK FOREIGN KEY (id_area) REFERENCES videoteca.dbo.area(id)
+);
+
+
+-- videoteca.dbo.video definition
+
+-- Drop table
+
+-- DROP TABLE videoteca.dbo.video;
+
+CREATE TABLE videoteca.dbo.video (
+	id bigint IDENTITY(0,1) NOT NULL,
+	url nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	titulo nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	descricao nvarchar(4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	active bit DEFAULT 1 NOT NULL,
+	enviadoPor bigint NOT NULL,
+	id_status bigint DEFAULT 0 NOT NULL,
+	id_area bigint NOT NULL,
+	id_subarea bigint NULL,
+	CONSTRAINT video_pk PRIMARY KEY (id),
+	CONSTRAINT video_area_FK FOREIGN KEY (id_area) REFERENCES videoteca.dbo.area(id),
+	CONSTRAINT video_status_FK FOREIGN KEY (id_status) REFERENCES videoteca.dbo.status(id),
+	CONSTRAINT video_subarea_FK FOREIGN KEY (id_subarea) REFERENCES videoteca.dbo.subarea(id),
+	CONSTRAINT video_usuario_FK FOREIGN KEY (enviadoPor) REFERENCES videoteca.dbo.usuario(id)
 );
 
 INSERT INTO videoteca.dbo.video (url,titulo,descricao,enviadoPor,active) VALUES
