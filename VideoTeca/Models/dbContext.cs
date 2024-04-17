@@ -28,6 +28,11 @@ namespace VideoTeca.Models
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<area>()
+                .HasMany(e => e.usuario)
+                .WithOptional(e => e.area)
+                .HasForeignKey(e => e.id_area);
+
+            modelBuilder.Entity<area>()
                 .HasMany(e => e.video)
                 .WithRequired(e => e.area)
                 .HasForeignKey(e => e.id_area)
