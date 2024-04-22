@@ -1,3 +1,4 @@
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
@@ -54,6 +55,7 @@ namespace VideoTeca.Models
                 .WithRequired(e => e.usuario)
                 .HasForeignKey(e => e.enviadoPor)
                 .WillCascadeOnDelete(false);
+
         }
     }
 }

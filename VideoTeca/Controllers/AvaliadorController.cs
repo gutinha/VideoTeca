@@ -13,6 +13,7 @@ namespace VideoTeca.Controllers
         // GET: Avaliador
         public ActionResult Index()
         {
+            ViewBag.Areas = db.area.ToList();
             return View();
         }
 
@@ -20,7 +21,7 @@ namespace VideoTeca.Controllers
         {
             long userLogado = Convert.ToInt64(Session["id_user"]);
             var user = db.usuario.Where(x => x.id == userLogado).FirstOrDefault();
-            IQueryable<video> videos = db.video.Where(v => v.active == true && v.id_area == user.id_area);
+            IQueryable<video> videos = db.video.Where(v => v.active == true && v.id_area == user.id_area && v.aprovado == false);
 
             //Filtro por área
             if (Area != null && Area != 0)

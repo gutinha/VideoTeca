@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using VideoTeca.Models;
 
@@ -10,7 +7,7 @@ namespace VideoTeca.Controllers
 {
     public class HomeController : Controller
     {
-        public dbContext db = new dbContext();
+        public readonly dbContext db = new dbContext();
 
         public ActionResult Index()
         {
@@ -34,7 +31,7 @@ namespace VideoTeca.Controllers
         public ActionResult ListarVideos()
         {
             ViewBag.Areas = db.area.ToList();
-            ViewBag.videos = db.video.Where(x=> x.active == true).ToList();
+            ViewBag.videos = db.video.Where(x=> x.active == true && x.aprovado == true).ToList();
            return View();
         }
 
@@ -54,7 +51,7 @@ namespace VideoTeca.Controllers
             var login = formulario["login"];
             var password = formulario["password"];
             password = Util.hash(password);
-            var usuario = db.usuario.Where(u => u.login.Equals(login) && u.password.Equals(password)).FirstOrDefault();
+            var usuario = db.usuario.Where(u => u.email.Equals(login) && u.password.Equals(password)).FirstOrDefault();
 
             if (usuario == null)
             {
@@ -76,7 +73,7 @@ namespace VideoTeca.Controllers
                 try
                 {
                     var login = formulario["login"];
-                    var usuario = db.usuario.Where(u => u.login.Equals(login)).FirstOrDefault();
+                    var usuario = db.usuario.Where(u => u.email.Equals(login)).FirstOrDefault();
 
                     if (usuario != null)
                     {
@@ -87,7 +84,7 @@ namespace VideoTeca.Controllers
                     usuario user = new usuario
                     {
                         nome = formulario["nome"],
-                        login = formulario["login"],
+                        email = formulario["login"],
                         password = Util.hash(formulario["password"]),
                         permission = 1,
                         active = true

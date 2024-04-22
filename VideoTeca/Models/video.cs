@@ -32,6 +32,8 @@ namespace VideoTeca.Models
 
         public long? id_subarea { get; set; }
 
+        public bool aprovado { get; set; }
+
         public virtual area area { get; set; }
 
         public virtual status status { get; set; }
