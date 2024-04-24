@@ -16,7 +16,7 @@
 <div class="row">
     <div class="mb-1">
         <video id="@Model.id"
-               class="video-js ratio ratio-16x9 rounded-3 mb-2"
+               class="video-js ratio"
                controls
                preload="auto"
                width="640"
@@ -36,7 +36,7 @@
         </div>
         <div class="form-group">
             <label for="floatingInputDescricao">Descrição:</label>
-            <textarea class="form-control overflow-auto" id="descricao" name="descricao" maxlength="4000">@Model.descricao</textarea>
+            <textarea class="form-control overflow-auto" id="descricao" name="descricao" maxlength="4000" disabled>@Model.descricao</textarea>
         </div>
         <div class="mb-1">
             <label for="floatingInputLink">Link do video: @Model.url</label>
