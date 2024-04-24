@@ -1,6 +1,7 @@
 ﻿-- DROP SCHEMA dbo;
 
 CREATE SCHEMA dbo;
+
 -- videoteca.dbo.area definition
 
 -- Drop table
@@ -11,24 +12,6 @@ CREATE TABLE videoteca.dbo.area (
 	id bigint IDENTITY(0,1) NOT NULL,
 	nome nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	CONSTRAINT area_pk PRIMARY KEY (id)
-);
-
-
--- videoteca.dbo.usuario definition
-
--- Drop table
-
--- DROP TABLE videoteca.dbo.usuario;
-
-CREATE TABLE videoteca.dbo.usuario (
-	id bigint IDENTITY(0,1) NOT NULL,
-	nome nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[login] nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	password nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	permission bigint DEFAULT 1 NOT NULL,
-	active bit DEFAULT 1 NOT NULL,
-	CONSTRAINT usuario_pk PRIMARY KEY (id),
-	CONSTRAINT usuario_unique UNIQUE ([login])
 );
 
 
@@ -60,6 +43,26 @@ CREATE TABLE videoteca.dbo.subarea (
 );
 
 
+-- videoteca.dbo.usuario definition
+
+-- Drop table
+
+-- DROP TABLE videoteca.dbo.usuario;
+
+CREATE TABLE videoteca.dbo.usuario (
+	id bigint IDENTITY(0,1) NOT NULL,
+	nome nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	email nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	password nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	permission bigint DEFAULT 1 NOT NULL,
+	active bit DEFAULT 1 NOT NULL,
+	id_area bigint NULL,
+	CONSTRAINT usuario_pk PRIMARY KEY (id),
+	CONSTRAINT usuario_unique UNIQUE (email),
+	CONSTRAINT usuario_area_FK FOREIGN KEY (id_area) REFERENCES videoteca.dbo.area(id)
+);
+
+
 -- videoteca.dbo.video definition
 
 -- Drop table
@@ -76,6 +79,7 @@ CREATE TABLE videoteca.dbo.video (
 	id_status bigint DEFAULT 0 NOT NULL,
 	id_area bigint NOT NULL,
 	id_subarea bigint NULL,
+	aprovado bit DEFAULT 0 NOT NULL,
 	CONSTRAINT video_pk PRIMARY KEY (id),
 	CONSTRAINT video_area_FK FOREIGN KEY (id_area) REFERENCES videoteca.dbo.area(id),
 	CONSTRAINT video_status_FK FOREIGN KEY (id_status) REFERENCES videoteca.dbo.status(id),
@@ -97,3 +101,8 @@ INSERT INTO videoteca.dbo.area (nome) VALUES
 
 INSERT INTO videoteca.dbo.subarea (nome,id_area) VALUES
 	 ('Lógica de programação',0);
+
+INSERT INTO videoteca.dbo.status (nome) VALUES
+	 ('Pendente'),
+	 ('Recusado'),
+	 ('Aprovado');
