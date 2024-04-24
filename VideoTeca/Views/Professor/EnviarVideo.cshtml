@@ -51,39 +51,49 @@
 @section Scripts {
     <script>
         document.getElementById('aceitarTermos').onchange = function () {
+            //var url = '@Url.Action("AceitarTermosModal", "Professor")';
+            /*$("#myModal").load(url);
+            $("#myModal").modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+            $("#myModal").show();
+            */
             document.getElementById('enviarBtn').disabled = !this.checked;
         };
 
         function BuscarSubArea() {
-    var areaId = $('#floatingSelect1').val();
-    $.ajax({
-        dataType: "json",
-        method: "POST",
-        url: "@Url.Action("BuscarSubArea", "Professor")",
-        data: { id: areaId },
-    }).done(function (data) {
-        var select = $("#floatingSelect");
-        select.empty();
-        select.append($('<option>', { value: '', text: 'Escolha uma Subárea' }));
+            var areaId = $('#floatingSelect1').val();
+            $.ajax({
+                dataType: "json",
+                method: "POST",
+                url: "@Url.Action("BuscarSubArea", "Professor")",
+                data: { id: areaId },
+            }).done(function (data) {
+            var select = $("#floatingSelect");
+            select.empty();
+            select.append($('<option>', { value: '', text: 'Escolha uma Subárea' }));
 
 
-        data.forEach(function (item) {
-            select.append($('<option>', {
-                value: item.Id,
-                text: item.Nome
-            }));
-        });
+            data.forEach(function (item) {
+                select.append($('<option>', {
+                    value: item.Id,
+                    text: item.Nome
+                }));
+            });
 
-        select.prop('disabled', false);
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-        console.error('Erro na chamada AJAX: ' + textStatus);
-    });
-}
-
-
+            select.prop('disabled', false);
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+            console.error('Erro na chamada AJAX: ' + textStatus);
+            });
+        }
         $('#floatingSelect1').on("change", function (event) {
             BuscarSubArea();
         });
+
+        /*document.getElementById('termsCheckbox').onchange = function () {
+            document.getElementById('fecharBtn').disabled = !this.checked;
+        };*/
     </script>
 }
 

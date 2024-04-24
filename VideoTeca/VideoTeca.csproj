@@ -6003,6 +6003,8 @@
     <Content Include="Views\Home\CriarConta.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Avaliador\Index.cshtml" />
+    <Content Include="Views\Professor\AceitarTermosModal.cshtml" />
+    <Content Include="Views\Avaliador\AvaliarVideo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

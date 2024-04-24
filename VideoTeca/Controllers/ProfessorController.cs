@@ -154,8 +154,9 @@ namespace VideoTeca.Controllers
                         url = url,
                         id_area = area,
                         enviadoPor = userLogado,
-                        active = false,
-                        id_status = 0
+                        active = true,
+                        id_status = 0,
+                        aprovado = false
                     };
                     if (!string.IsNullOrEmpty(subareaStr) && int.TryParse(subareaStr, out subarea))
                     {
@@ -191,6 +192,11 @@ namespace VideoTeca.Controllers
             }
             TempData["s"] = "Video enviado com sucesso! Aguarde um avaliador aprovar seu video.";
             return RedirectToAction("Index", "Professor");
+        }
+
+        public ActionResult AceitarTermosModal()
+        {
+            return View();
         }
 
     }
