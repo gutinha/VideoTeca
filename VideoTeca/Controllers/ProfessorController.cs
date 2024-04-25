@@ -170,19 +170,6 @@ namespace VideoTeca.Controllers
                     db.SaveChanges();
                     transaction.Commit();
                 }
-                catch (DbEntityValidationException ex)
-                {
-                    // Loop através dos erros de validação para obter detalhes
-                    foreach (var entityValidationError in ex.EntityValidationErrors)
-                    {
-                        foreach (var validationError in entityValidationError.ValidationErrors)
-                        {
-                            TempData["e"] = validationError.PropertyName + " Error: "+ validationError.ErrorMessage;
-                            Console.WriteLine("Property: " + validationError.PropertyName + " Error: " + validationError.ErrorMessage);
-                        }
-                    }
-                    return RedirectToAction("Index", "Professor");
-                }
                 catch (Exception ex)
                 {
                     transaction.Rollback();
