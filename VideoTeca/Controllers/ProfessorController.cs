@@ -129,7 +129,7 @@ namespace VideoTeca.Controllers
                                         x.titulo,
                                         id_status = x.status.nome,
                                         id_area = x.area.nome,
-                                        id_subarea = x.subarea.nome
+                                        id_subarea = x.subarea != null ? x.subarea.nome : "Nenhum"
                                     }).ToList();
 
             return Json(new { total = totalItens, rows = resultados }, JsonRequestBehavior.AllowGet);
