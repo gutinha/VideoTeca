@@ -59,7 +59,6 @@
             });
             $("#myModal").modal('show');
         });
-
         
         function fetchSubAreas() {
             var areaId = $('#floatingSelect1').val();
@@ -87,10 +86,8 @@
             });
         }
 
-        
         $('#floatingSelect1').on("change", fetchSubAreas);
 
-        
         $(document).on("change", "#termsCheckbox", function() {
             var isChecked = $(this).is(':checked');
             $('#fecharBtn').prop('disabled', !isChecked);
