@@ -23,6 +23,12 @@ namespace VideoTeca.Controllers
             var video = db.video.Find(id);
             return View(video);
         }
+        [HttpPost]
+        public ActionResult AvaliarVideo(FormCollection formulario)
+        {
+            
+            return View();
+        }
 
         public ActionResult ListarVideosEnviadosAjax(string search, string sort, string order, int? Area, int? SubArea, int? limit = 10, int? offset = 0)
         {
