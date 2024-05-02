@@ -26,7 +26,26 @@ namespace VideoTeca.Controllers
         [HttpPost]
         public ActionResult AvaliarVideo(FormCollection formulario)
         {
-            
+            using(var transaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    long userLogado = Convert.ToInt64(Session["id_user"]);
+                    var user = db.usuario.Where(x => x.id == userLogado).FirstOrDefault();
+                    var justificativa = formulario["justificativa"];
+                    var id_video = formulario["id"];
+                    var video = db.video.Find(id_video);
+                    if (justificativa != null)
+                    {
+                        video.aprovado = true;
+                    }
+                    
+
+                } catch(Exception ex)
+                {
+                    transaction.Rollback();
+                }
+            }
             return View();
         }
 

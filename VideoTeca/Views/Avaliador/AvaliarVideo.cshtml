@@ -2,7 +2,6 @@
 @model video
 @{
     ViewBag.Title = "Avaliar Video";
-
 }
 @using (Html.BeginForm("AvaliarVideo", "Avaliador", FormMethod.Post, new { enctype = "multipart/form-data", id = "avaliarVideo", autocomplete = "on" }))
 {
@@ -37,7 +36,7 @@
             </div>
             <div class="form-group">
                 <label for="floatingInputDescricao">Descrição:</label>
-                <textarea class="form-control overflow-auto" id="descricao" name="descricao" maxlength="4000" disabled>@Model.descricao</textarea>
+                <textarea class="form-control overflow-auto" style="min-height:100px;" id="descricao" name="descricao" maxlength="4000" disabled>@Model.descricao</textarea>
             </div>
             <div class="mb-1">
                 <label for="floatingInputLink">Link do video: @Model.url</label>
@@ -47,8 +46,40 @@
             <div>Enviado por: @Model.usuario.nome</div>
         </div>
         <div class="form-group form-check">
-            <a class="btn btn-primary" style="float: right; color: white; text-decoration: none; " id="aceitarTermos" name="aceitarTermos">Aceitar termos</a>
-            <button type="submit" class="btn btn-primary offset-11" style="float:right" id="enviarBtn" disabled>Enviar</button>
+            <a class="btn btn-success" style="float: right; color: white; text-decoration: none;" id="aprovado" name="aprovado" onclick="habilitarJustificativa(true)">Aprovado</a>
+            <a class="btn btn-danger" style="float: right; color: white; text-decoration: none; margin-right:2px;" id="reprovado" onclick="habilitarJustificativa(false)">Reprovado</a>
         </div>
+        <div class="form-group" id="justificativaDiv" style="display: none;">
+            <label for="floatingInputDescricao">Justificativa:*</label>
+            <textarea class="form-control overflow-auto" id="justificativa" name="justificativa" maxlength="4000" required></textarea>
+        </div>
+        <div class="form-group form-check">
+            <button class="btn btn-primary" type="submit" style="float: right; color: white; text-decoration: none;" id="avaliar" disabled>Avaliar</button>
+        </div>
+        <input type="text" class="form-control" id="id" name="id" hidden="hidden" value="@Model.id">
     </div>
 }
+@section Scripts {
+    <script>
+        function habilitarJustificativa(aprovado) {
+            var justificativaDiv = document.getElementById("justificativaDiv");
+            var avaliarButton = document.getElementById("avaliar");
+
+            if (aprovado) {
+                justificativaDiv.style.display = "none";
+                avaliarButton.disabled = false;
+            } else {
+                justificativaDiv.style.display = "block";
+                avaliarButton.disabled = true;
+            }
+        }
+
+        document.getElementById("justificativa").addEventListener("input", function () {
+            var justificativa = this.value.trim();
+            var avaliarButton = document.getElementById("avaliar");
+
+            avaliarButton.disabled = justificativa === "";
+        });
+    </script>
+}
+
