@@ -34,6 +34,9 @@ namespace VideoTeca.Models
 
         public bool aprovado { get; set; }
 
+        [StringLength(4000)]
+        public string justificativa { get; set; }
+
         public virtual area area { get; set; }
 
         public virtual status status { get; set; }

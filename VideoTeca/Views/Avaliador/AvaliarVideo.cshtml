@@ -64,12 +64,15 @@
         function habilitarJustificativa(aprovado) {
             var justificativaDiv = document.getElementById("justificativaDiv");
             var avaliarButton = document.getElementById("avaliar");
+            var justificativaField = document.getElementById("justificativa");
 
             if (aprovado) {
                 justificativaDiv.style.display = "none";
+                justificativaField.disabled = true;
                 avaliarButton.disabled = false;
             } else {
                 justificativaDiv.style.display = "block";
+                justificativaField.disabled = false;
                 avaliarButton.disabled = true;
             }
         }
@@ -81,5 +84,6 @@
             avaliarButton.disabled = justificativa === "";
         });
     </script>
+
 }
 

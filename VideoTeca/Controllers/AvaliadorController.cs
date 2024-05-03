@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity.Migrations;
+using System.EnterpriseServices.CompensatingResourceManager;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.WebPages;
 using VideoTeca.Models;
 
 namespace VideoTeca.Controllers
@@ -33,27 +36,40 @@ namespace VideoTeca.Controllers
                     long userLogado = Convert.ToInt64(Session["id_user"]);
                     var user = db.usuario.Where(x => x.id == userLogado).FirstOrDefault();
                     var justificativa = formulario["justificativa"];
-                    var id_video = formulario["id"];
+                    var id_video = Convert.ToInt64(formulario["id"]);
                     var video = db.video.Find(id_video);
                     if (justificativa != null)
                     {
+                        if (!justificativa.IsEmpty() || !justificativa.Equals(""))
+                        {
+                            video.justificativa = justificativa;
+                        }
+                    }
+                    else
+                    {
                         video.aprovado = true;
                     }
-                    
+
+                    db.Entry(video).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    transaction.Commit();
 
                 } catch(Exception ex)
                 {
+                    TempData["e"] = "Ocorreu algum erro, contate o administrador do sistema: " + ex.ToString();
                     transaction.Rollback();
+                    return RedirectToAction("Index");
                 }
             }
-            return View();
+            TempData["s"] = "Video avaliado com sucesso!";
+            return RedirectToAction("Index");
         }
 
         public ActionResult ListarVideosEnviadosAjax(string search, string sort, string order, int? Area, int? SubArea, int? limit = 10, int? offset = 0)
         {
             long userLogado = Convert.ToInt64(Session["id_user"]);
             var user = db.usuario.Where(x => x.id == userLogado).FirstOrDefault();
-            IQueryable<video> videos = db.video.Where(v => v.active == true && v.id_area == user.id_area && v.aprovado == false);
+            IQueryable<video> videos = db.video.Where(v => v.active == true && v.id_area == user.id_area && v.aprovado == false && v.justificativa == null);
 
             //Filtro por área
             if (Area != null && Area != 0)
