@@ -1,6 +1,41 @@
 ﻿-- DROP SCHEMA dbo;
 
 CREATE SCHEMA dbo;
+-- videoteca.dbo.AspNetRoles definition
+
+-- Drop table
+
+-- DROP TABLE videoteca.dbo.AspNetRoles;
+
+CREATE TABLE videoteca.dbo.AspNetRoles (
+	Id nvarchar(128) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	Name nvarchar(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	CONSTRAINT [PK_dbo.AspNetRoles] PRIMARY KEY (Id)
+);
+
+
+-- videoteca.dbo.AspNetUsers definition
+
+-- Drop table
+
+-- DROP TABLE videoteca.dbo.AspNetUsers;
+
+CREATE TABLE videoteca.dbo.AspNetUsers (
+	Id nvarchar(128) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	Email nvarchar(256) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	EmailConfirmed bit NOT NULL,
+	PasswordHash nvarchar(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	SecurityStamp nvarchar(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	PhoneNumber nvarchar(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	PhoneNumberConfirmed bit NOT NULL,
+	TwoFactorEnabled bit NOT NULL,
+	LockoutEndDateUtc datetime NULL,
+	LockoutEnabled bit NOT NULL,
+	AccessFailedCount int NOT NULL,
+	UserName nvarchar(256) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	CONSTRAINT [PK_dbo.AspNetUsers] PRIMARY KEY (Id)
+);
+
 
 -- videoteca.dbo.area definition
 
@@ -80,6 +115,7 @@ CREATE TABLE videoteca.dbo.video (
 	id_area bigint NOT NULL,
 	id_subarea bigint NULL,
 	aprovado bit DEFAULT 0 NOT NULL,
+	justificativa nvarchar(4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	CONSTRAINT video_pk PRIMARY KEY (id),
 	CONSTRAINT video_area_FK FOREIGN KEY (id_area) REFERENCES videoteca.dbo.area(id),
 	CONSTRAINT video_status_FK FOREIGN KEY (id_status) REFERENCES videoteca.dbo.status(id),
