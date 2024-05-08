@@ -13,7 +13,7 @@ namespace VideoTeca.Controllers
 {
     public class ProfessorController : Controller
     {
-        public dbContext db = new dbContext();
+        private readonly dbContext db = new dbContext();
 
         public ActionResult Index()
         {

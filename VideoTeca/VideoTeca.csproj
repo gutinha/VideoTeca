@@ -137,6 +137,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AvaliadorController.cs" />
+    <Compile Include="Controllers\CoordenadorController.cs" />
     <Compile Include="Models\area.cs" />
     <Compile Include="Controllers\ProfessorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -6005,6 +6006,8 @@
     <Content Include="Views\Avaliador\Index.cshtml" />
     <Content Include="Views\Professor\AceitarTermosModal.cshtml" />
     <Content Include="Views\Avaliador\AvaliarVideo.cshtml" />
+    <Content Include="Views\Coordenador\Index.cshtml" />
+    <Content Include="Views\Coordenador\ControleUsuarios.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

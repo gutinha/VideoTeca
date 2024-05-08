@@ -13,7 +13,7 @@ namespace VideoTeca.Controllers
 {
     public class AvaliadorController : Controller
     {
-        public readonly dbContext db = new dbContext();
+        private readonly dbContext db = new dbContext();
         // GET: Avaliador
         public ActionResult Index()
         {

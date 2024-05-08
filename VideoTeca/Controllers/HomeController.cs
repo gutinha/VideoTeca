@@ -7,7 +7,7 @@ namespace VideoTeca.Controllers
 {
     public class HomeController : Controller
     {
-        public readonly dbContext db = new dbContext();
+        private readonly dbContext db = new dbContext();
 
         public ActionResult Index()
         {
