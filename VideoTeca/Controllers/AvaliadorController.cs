@@ -43,11 +43,13 @@ namespace VideoTeca.Controllers
                         if (!justificativa.IsEmpty() || !justificativa.Equals(""))
                         {
                             video.justificativa = justificativa;
+                            video.id_status = 1;
                         }
                     }
                     else
                     {
                         video.aprovado = true;
+                        video.id_status = 2;
                     }
 
                     db.Entry(video).State = System.Data.Entity.EntityState.Modified;
