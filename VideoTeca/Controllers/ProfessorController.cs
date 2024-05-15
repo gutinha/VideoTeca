@@ -156,7 +156,8 @@ namespace VideoTeca.Controllers
                         enviadoPor = userLogado,
                         active = true,
                         id_status = 0,
-                        aprovado = false
+                        aprovado = false,
+                        enviadoEm = DateTime.Now
                     };
                     if (!string.IsNullOrEmpty(subareaStr) && int.TryParse(subareaStr, out subarea))
                     {

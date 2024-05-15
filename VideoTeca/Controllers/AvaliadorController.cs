@@ -42,7 +42,14 @@ namespace VideoTeca.Controllers
                     {
                         if (!justificativa.IsEmpty() || !justificativa.Equals(""))
                         {
-                            video.justificativa = justificativa;
+                            var novaAvaliacao = new video_avaliacoes
+                            {
+                                id_avaliador = user.id,
+                                id_video = id_video,
+                                justificativa = justificativa,
+                                data_avaliacao = DateTime.Now
+                            };
+                            db.video_avaliacoes.Add(novaAvaliacao);
                             video.id_status = 1;
                         }
                     }

@@ -19,6 +19,7 @@ namespace VideoTeca.Models
         public virtual DbSet<subarea> subarea { get; set; }
         public virtual DbSet<usuario> usuario { get; set; }
         public virtual DbSet<video> video { get; set; }
+        public virtual DbSet<video_avaliacoes> video_avaliacoes { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -29,15 +30,15 @@ namespace VideoTeca.Models
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<area>()
-                .HasMany(e => e.usuario)
-                .WithOptional(e => e.area)
-                .HasForeignKey(e => e.id_area);
-
-            modelBuilder.Entity<area>()
                 .HasMany(e => e.video)
                 .WithRequired(e => e.area)
                 .HasForeignKey(e => e.id_area)
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<area>()
+                .HasMany(e => e.usuario)
+                .WithMany(e => e.area)
+                .Map(m => m.ToTable("usuarios_areas").MapLeftKey("id_area").MapRightKey("id_usuario"));
 
             modelBuilder.Entity<status>()
                 .HasMany(e => e.video)
@@ -51,9 +52,21 @@ namespace VideoTeca.Models
                 .HasForeignKey(e => e.id_subarea);
 
             modelBuilder.Entity<usuario>()
+                .HasMany(e => e.video_avaliacoes)
+                .WithRequired(e => e.usuario)
+                .HasForeignKey(e => e.id_avaliador)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<usuario>()
                 .HasMany(e => e.video)
                 .WithRequired(e => e.usuario)
                 .HasForeignKey(e => e.enviadoPor)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<video>()
+                .HasMany(e => e.video_avaliacoes)
+                .WithRequired(e => e.video)
+                .HasForeignKey(e => e.id_video)
                 .WillCascadeOnDelete(false);
 
         }

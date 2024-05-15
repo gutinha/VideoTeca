@@ -31,7 +31,7 @@ namespace VideoTeca.Controllers
         public ActionResult ListarVideos()
         {
             ViewBag.Areas = db.area.ToList();
-            ViewBag.videos = db.video.Where(x=> x.active == true && x.aprovado == true).ToList();
+            ViewBag.videos = db.video.Where(x => x.active == true && x.aprovado == true).OrderByDescending(x => x.enviadoEm).Take(10).ToList();
            return View();
         }
 

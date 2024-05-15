@@ -9,6 +9,12 @@ namespace VideoTeca.Models
     [Table("video")]
     public partial class video
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public video()
+        {
+            video_avaliacoes = new HashSet<video_avaliacoes>();
+        }
+
         public long id { get; set; }
 
         [Required]
@@ -34,8 +40,7 @@ namespace VideoTeca.Models
 
         public bool aprovado { get; set; }
 
-        [StringLength(4000)]
-        public string justificativa { get; set; }
+        public DateTime enviadoEm { get; set; }
 
         public virtual area area { get; set; }
 
@@ -44,5 +49,8 @@ namespace VideoTeca.Models
         public virtual subarea subarea { get; set; }
 
         public virtual usuario usuario { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<video_avaliacoes> video_avaliacoes { get; set; }
     }
 }

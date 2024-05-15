@@ -13,8 +13,8 @@ namespace VideoTeca.Models
         public area()
         {
             subarea = new HashSet<subarea>();
-            usuario = new HashSet<usuario>();
             video = new HashSet<video>();
+            usuario = new HashSet<usuario>();
         }
 
         public long id { get; set; }
@@ -27,9 +27,9 @@ namespace VideoTeca.Models
         public virtual ICollection<subarea> subarea { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<usuario> usuario { get; set; }
+        public virtual ICollection<video> video { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<video> video { get; set; }
+        public virtual ICollection<usuario> usuario { get; set; }
     }
 }

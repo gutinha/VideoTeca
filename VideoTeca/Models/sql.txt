@@ -3,40 +3,6 @@
 CREATE SCHEMA dbo;
 -- videoteca.dbo.AspNetRoles definition
 
--- Drop table
-
--- DROP TABLE videoteca.dbo.AspNetRoles;
-
-CREATE TABLE videoteca.dbo.AspNetRoles (
-	Id nvarchar(128) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	Name nvarchar(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CONSTRAINT [PK_dbo.AspNetRoles] PRIMARY KEY (Id)
-);
-
-
--- videoteca.dbo.AspNetUsers definition
-
--- Drop table
-
--- DROP TABLE videoteca.dbo.AspNetUsers;
-
-CREATE TABLE videoteca.dbo.AspNetUsers (
-	Id nvarchar(128) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	Email nvarchar(256) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	EmailConfirmed bit NOT NULL,
-	PasswordHash nvarchar(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	SecurityStamp nvarchar(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	PhoneNumber nvarchar(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	PhoneNumberConfirmed bit NOT NULL,
-	TwoFactorEnabled bit NOT NULL,
-	LockoutEndDateUtc datetime NULL,
-	LockoutEnabled bit NOT NULL,
-	AccessFailedCount int NOT NULL,
-	UserName nvarchar(256) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	CONSTRAINT [PK_dbo.AspNetUsers] PRIMARY KEY (Id)
-);
-
-
 -- videoteca.dbo.area definition
 
 -- Drop table
@@ -63,21 +29,6 @@ CREATE TABLE videoteca.dbo.status (
 );
 
 
--- videoteca.dbo.subarea definition
-
--- Drop table
-
--- DROP TABLE videoteca.dbo.subarea;
-
-CREATE TABLE videoteca.dbo.subarea (
-	id bigint IDENTITY(0,1) NOT NULL,
-	nome nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	id_area bigint NOT NULL,
-	CONSTRAINT subarea_pk PRIMARY KEY (id),
-	CONSTRAINT subarea_area_FK FOREIGN KEY (id_area) REFERENCES videoteca.dbo.area(id)
-);
-
-
 -- videoteca.dbo.usuario definition
 
 -- Drop table
@@ -91,10 +42,23 @@ CREATE TABLE videoteca.dbo.usuario (
 	password nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	permission bigint DEFAULT 1 NOT NULL,
 	active bit DEFAULT 1 NOT NULL,
-	id_area bigint NULL,
 	CONSTRAINT usuario_pk PRIMARY KEY (id),
-	CONSTRAINT usuario_unique UNIQUE (email),
-	CONSTRAINT usuario_area_FK FOREIGN KEY (id_area) REFERENCES videoteca.dbo.area(id)
+	CONSTRAINT usuario_unique UNIQUE (email)
+);
+
+
+-- videoteca.dbo.subarea definition
+
+-- Drop table
+
+-- DROP TABLE videoteca.dbo.subarea;
+
+CREATE TABLE videoteca.dbo.subarea (
+	id bigint IDENTITY(0,1) NOT NULL,
+	nome nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	id_area bigint NOT NULL,
+	CONSTRAINT subarea_pk PRIMARY KEY (id),
+	CONSTRAINT subarea_area_FK FOREIGN KEY (id_area) REFERENCES videoteca.dbo.area(id)
 );
 
 
@@ -115,7 +79,7 @@ CREATE TABLE videoteca.dbo.video (
 	id_area bigint NOT NULL,
 	id_subarea bigint NULL,
 	aprovado bit DEFAULT 0 NOT NULL,
-	justificativa nvarchar(4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	enviadoEm datetime NOT NULL,
 	CONSTRAINT video_pk PRIMARY KEY (id),
 	CONSTRAINT video_area_FK FOREIGN KEY (id_area) REFERENCES videoteca.dbo.area(id),
 	CONSTRAINT video_status_FK FOREIGN KEY (id_status) REFERENCES videoteca.dbo.status(id),
@@ -123,20 +87,37 @@ CREATE TABLE videoteca.dbo.video (
 	CONSTRAINT video_usuario_FK FOREIGN KEY (enviadoPor) REFERENCES videoteca.dbo.usuario(id)
 );
 
-INSERT INTO videoteca.dbo.video (url,titulo,descricao,enviadoPor,active) VALUES
-	 ('https://www.youtube.com/watch?v=pscwcTZgCGU','Curso POO Teoria #04a - Métodos Especiais','testando','Curso em video',1),
-	 ('https://www.youtube.com/watch?v=KlIL63MeyMY','POO #1','Video introdutório de POO em java','Curso em video',1),
-	 ('https://www.youtube.com/watch?v=Ucyx_QPfDng','Curso POO Java #01b - Instalando o JDK e NetBeans','aaaaaaa','Curso em video',1),
-	 ('https://www.youtube.com/watch?v=aR7CKNFECx0','Curso POO Teoria #02a - O que é um Objeto?','Video introdutório de POO em java','Curso em video',1),
-	 ('https://www.youtube.com/watch?v=wNaoX6VOj54','Curso POO Java #02b - Criando Classes e Objetos em Java','Video introdutório de POO em java','Curso em video',1),
-	 ('https://www.youtube.com/watch?v=jFI-qqitzwk','Curso POO Teoria #03a - O que é Visibilidade em um Objeto?','Video introdutório de POO em java','Curso em video',1);
 
-INSERT INTO videoteca.dbo.area (nome) VALUES
-	 ('Informática'),
-	 ('Matemática');
+-- videoteca.dbo.video_avaliacoes definition
 
-INSERT INTO videoteca.dbo.subarea (nome,id_area) VALUES
-	 ('Lógica de programação',0);
+-- Drop table
+
+-- DROP TABLE videoteca.dbo.video_avaliacoes;
+
+CREATE TABLE videoteca.dbo.video_avaliacoes (
+	id_video bigint NOT NULL,
+	id_avaliador bigint NOT NULL,
+	justificativa nvarchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	data_avaliacao datetime NULL,
+	CONSTRAINT video_avaliacoes_pk PRIMARY KEY (id_video,id_avaliador),
+	CONSTRAINT video_avaliacoes_usuario_FK FOREIGN KEY (id_avaliador) REFERENCES videoteca.dbo.usuario(id),
+	CONSTRAINT video_avaliacoes_video_FK FOREIGN KEY (id_video) REFERENCES videoteca.dbo.video(id)
+);
+
+
+-- videoteca.dbo.usuarios_areas definition
+
+-- Drop table
+
+-- DROP TABLE videoteca.dbo.usuarios_areas;
+
+CREATE TABLE videoteca.dbo.usuarios_areas (
+	id_area bigint NOT NULL,
+	id_usuario bigint NOT NULL,
+	CONSTRAINT usuarios_areas_pk PRIMARY KEY (id_area,id_usuario),
+	CONSTRAINT usuarios_areas_area_FK FOREIGN KEY (id_area) REFERENCES videoteca.dbo.area(id),
+	CONSTRAINT usuarios_areas_usuario_FK FOREIGN KEY (id_usuario) REFERENCES videoteca.dbo.usuario(id)
+);
 
 INSERT INTO videoteca.dbo.status (nome) VALUES
 	 ('Pendente'),
