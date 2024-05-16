@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.EnterpriseServices.CompensatingResourceManager;
 using System.Linq;
@@ -77,8 +78,11 @@ namespace VideoTeca.Controllers
         public ActionResult ListarVideosEnviadosAjax(string search, string sort, string order, int? Area, int? SubArea, int? limit = 10, int? offset = 0)
         {
             long userLogado = Convert.ToInt64(Session["id_user"]);
-            var user = db.usuario.Where(x => x.id == userLogado).FirstOrDefault();
-            IQueryable<video> videos = db.video.Where(v => v.active == true && v.id_area == user.id_area && v.aprovado == false && v.justificativa == null);
+            var user = db.usuario.Include(u => u.area).Where(x => x.id == userLogado).First();
+            IQueryable<video> videos = db.video.Where(v => v.active == true && 
+                                                      v.area.usuario.Any(u=> u.id == user.id) && 
+                                                      v.aprovado == false &&
+                                                      (!v.video_avaliacoes.Any() || v.video_avaliacoes.Any(a => a.justificativa == null)));
 
             //Filtro por área
             if (Area != null && Area != 0)

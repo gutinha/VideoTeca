@@ -1,4 +1,5 @@
 ﻿1 = usuário
 2 = professor
 3 = avaliador
-4 = coordenador
+4 = dicom
+5 = coordenador
