@@ -1,0 +1,75 @@
+﻿@using VideoTeca.Models
+@model usuario
+@{
+    ViewBag.Title = "Editar Usuário";
+    List<area> areasUsuario = ViewBag.AreasUsuario;
+    long permissao = ViewBag.Permissao;
+    List<area> areas = ViewBag.Areas;
+
+    var userTypes = new Dictionary<long, string>
+{
+        { 1, "Usuário" },
+        { 2, "Professor" },
+        { 3, "Avaliador" },
+        { 4, "Dicom" },
+        { 5, "Coordenador" }
+    };
+
+}
+
+@using (Html.BeginForm("EditarUsuario", "Coordenador", FormMethod.Post, new { enctype = "multipart/form-data", id = "editarUsuario", autocomplete = "on" }))
+{
+    <div class="container" style="max-width: 100%;">
+        <div class="row row-cols-1 row-cols-md-3">
+            <div class="col ">
+                <div class="card">
+                    <div class="card-header text-white bg-primary" style="font-size: 28px;">Dados do Usuário</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="form-group col-lg-7" id="usuario">
+                                        <label for="usuario" class="control-label">Usuário:</label>
+                                        <br />
+                                        <input disabled id="usuario" name="Nome" value="@Model.nome (@Model.email)" autocomplete="off" type="text" class="form-control" tabindex="4" style="color: #0c0c0c;" required />
+                                        <input id="idUsuario" name="idUsuario" type="hidden" required value="@Model.id" />
+                                    </div>
+                                    <div class="form-group col-lg-4 ">
+                                        <label for="TipoUsuario" class="control-label">Tipo de Usuário*:</label>
+                                        <br />
+                                        <select class="form-control" id="TipoUsuario" name="TipoUsuario" tabindex="14" style="color: #0c0c0c;" required="">
+                                            @foreach (var userType in userTypes)
+                                            {
+                                                <option value="@userType.Key" @(userType.Key == permissao ? "selected" : "")>@userType.Value</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-12" id="areaUsuario">
+                                        <label for="AreasUsuario" class="control-label">Áreas Vinculadas ao Usuário*:</label>
+                                        <select class="form-control" id="AreasUsuario" name="AreasUsuario[]" multiple="multiple" tabindex="14" style="color: #0c0c0c; height: 100px">
+                                            @foreach (var areasUser in areasUsuario)
+                                            {
+                                                <option selected value="@areasUser.id">@areasUser.nome</option>
+                                            }
+                                            @foreach (var area in areas)
+                                            {
+                                                <option value="@area.id">@area.nome</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <a id="btn-back" href="@Url.Action("Index", "Coordenador")" class="btn btn-info">Voltar</a>
+        <button type="submit" class="btn btn-success" id="btnEnvia" name="btnEnvia">
+            <span class="fa fa-save fa-w-2"></span>&nbsp;&nbsp;Salvar
+        </button>
+    </div>
+}
+
