@@ -28,16 +28,77 @@ namespace VideoTeca.Controllers
 
         public ActionResult ControleUsuarios()
         {
-            ViewBag.Usuarios = db.usuario.Where(u => u.active == true).ToList();
+            ViewBag.Usuarios = db.usuario.ToList();
             return View();
+        }
+
+        public ActionResult DetalhesUsuarioModal(int id)
+        {
+            var usuario = db.usuario.Find(id);
+            ViewBag.AreasUsuario = db.area.Where(v => v.usuario.Any(z => z.id == id)).ToList();
+            return View(usuario);
+        }
+
+        public ActionResult ExcluirUsuarioModal(int id)
+        {
+            var usuario = db.usuario.Find(id);
+            ViewBag.AreasUsuario = db.area.Where(v => v.usuario.Any(z => z.id == id)).ToList();
+            return View(usuario);
+        }
+
+        [HttpPost]
+        public ActionResult ExcluirUsuario(int id)
+        {
+            try
+            {
+                var user = db.usuario.Find(id);
+                user.active = false;
+                db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                TempData["s"] = "Excluído com sucesso!";
+                return RedirectToAction("ControleUsuarios");
+            }
+            catch (Exception ex)
+            {
+                TempData["e"] = "Ocorreu algum erro, contate o administrador do sistema: " + ex.ToString();
+                return RedirectToAction("ControleUsuarios");
+            }
+        }
+
+        public ActionResult AtivarUsuarioModal(int id)
+        {
+            var usuario = db.usuario.Find(id);
+            ViewBag.AreasUsuario = db.area.Where(v => v.usuario.Any(z => z.id == id)).ToList();
+            return View(usuario);
+        }
+
+        [HttpPost]
+        [ActionName("AtivarUsuarioModal")]
+        public ActionResult AtivarUsuarioModalPost(int idUsuario)
+        {
+            try
+            {
+                var user = db.usuario.Find(idUsuario);
+                user.active = true;
+                db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                TempData["s"] = "Usuário ativado com sucesso!";
+                return RedirectToAction("ControleUsuarios");
+            }
+            catch (Exception ex)
+            {
+                TempData["e"] = "Ocorreu algum erro, contate o administrador do sistema: " + ex.ToString();
+                return RedirectToAction("ControleUsuarios");
+            }
         }
 
         public ActionResult EditarUsuario(int id)
         {
             var usuario = db.usuario.Find(id);
-            long userLogado = Convert.ToInt64(Session["id_user"]);
-            ViewBag.AreasUsuario = db.area.Where(v=> v.usuario.Any(z=> z.id == id));
-            ViewBag.Permissao = db.usuario.Where(u=> u.id == userLogado).Select(x => x.permission);
+            //long userLogado = Convert.ToInt64(Session["id_user"]);
+            ViewBag.AreasUsuario = db.area.Where(v=> v.usuario.Any(z=> z.id == id)).ToList();
+            ViewBag.Areas = db.area.ToList();
+            ViewBag.Permissao = db.usuario.Where(u=> u.id == id).Select(x => x.permission).First();
             return View(usuario);
         }
 
@@ -51,38 +112,42 @@ namespace VideoTeca.Controllers
                     var user = Convert.ToInt64(formulario["idUsuario"]);
                     var editUser = db.usuario.Find(user);
 
-                    editUser.permission = Convert.ToInt64(formulario["TipoUsuario"]);
-                    string[] areasUsuario = formulario["AreasUsuario[]"].Split(',');
-
-                    //converter array de string em array de int
-                    List<long> arrayIntAreasUsuario = new List<long>();
-                    foreach (var item in areasUsuario)
+                    if (editUser == null)
                     {
-                        arrayIntAreasUsuario.Add(Convert.ToInt64(item));
+                        TempData["e"] = "Usuário não encontrado.";
+                        return RedirectToAction("ControleUsuarios");
                     }
+                    
+                    editUser.permission = Convert.ToInt64(formulario["TipoUsuario"]);
 
                     //excluir todas as areas pertencentes ao usuário
                     editUser.area.Clear();
 
-                    if (!formulario["AreasUsuario[]"].IsEmpty() || formulario["AreasUsuario[]"] != null)
+                    if (!string.IsNullOrEmpty(formulario["AreasUsuario[]"]))
                     {
+                        string[] areasUsuario = formulario["AreasUsuario[]"].Split(',');
+                        //converter array de string em array de int
+                        List<long> arrayIntAreasUsuario = areasUsuario.Select(long.Parse).ToList();
+
                         var selectedAreas = db.area.Where(a => arrayIntAreasUsuario.Contains(a.id)).ToList();
                         foreach (var area in selectedAreas)
                         {
                             editUser.area.Add(area);
                         }
                     }
+
                     db.Entry(editUser).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                     transaction.Commit();
+
+                    TempData["s"] = "Usuário editado com sucesso!";
+                    return RedirectToAction("ControleUsuarios");
                 } catch (Exception ex)
                 {
                     TempData["e"] = "Ocorreu algum erro, contate o administrador do sistema: " + ex.ToString();
                     transaction.Rollback();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("ControleUsuarios");
                 }
-                TempData["s"] = "Usuário editado com sucesso!";
-                return RedirectToAction("Index");
             }
         }
 
@@ -161,6 +226,7 @@ namespace VideoTeca.Controllers
                                     .Select(x => new
                                     {
                                         id = x.id,
+                                        x.active,
                                         x.nome,
                                         x.email,
                                         permission = PermissionNames.TryGetValue(x.permission, out var permissionName) ? permissionName : "Desconhecido"

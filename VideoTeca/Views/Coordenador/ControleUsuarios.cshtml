@@ -73,6 +73,11 @@
                         title: 'Item ID',
                         field: 'id',
                         visible: false
+                        },
+                    {
+                        title: 'Ativo',
+                        field: 'active',
+                        visible: false
                     },
                     {
                         title: 'Nome',
@@ -98,6 +103,7 @@
                         title: 'Ação',
                         field: 'operate',
                         align: 'center',
+                        events: eventos,
                         formatter: operateFormatter,
                         width: '200px'
                     }
@@ -105,11 +111,49 @@
             });
         });
 
+        window.eventos = {
+            'click .informacao': function(e, value, row, index) {
+                var url = '@Url.Action("DetalhesUsuarioModal", "Coordenador")/' + row.id;
+                $("#myModal").load(url);
+                $("#myModal").modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                $("#myModal").modal('show');
+            },
+
+            'click .excluir': function(e, value, row, index) {
+                var url = '@Url.Action("ExcluirUsuarioModal", "Coordenador")/' + row.id;
+                $("#myModal").load(url);
+                $("#myModal").modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                $("#myModal").modal('show');
+            },
+
+            'click .reativar': function(e, value, row, index) {
+                var url = '@Url.Action("AtivarUsuarioModal", "Coordenador")/' + row.id;
+                $("#myModal").load(url);
+                $("#myModal").modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                $("#myModal").modal('show');
+            }
+        };
+
+
+
         function operateFormatter(value, row, index) {
             var texto = [];
             texto.push('<a href="#" class="informacao" ><i title="Informações" class="fas fa-search fa-lg " data-original-title="Informações"></i></a>');
             texto.push('<a href="@Url.Action("EditarUsuario", "Coordenador")/' + row.id + '"><i title="Editar" class="fas fa-edit fa-lg" data-original-title="Editar"></i></a>');
-            texto.push('<a href="#" class="excluir" ><i title="Excluir" class="fas fa-trash-alt fa-lg " data-original-title="Excluir"></i></a>');
+            if (row.active == 1) {
+                texto.push('<a href="#" class="excluir" ><i title="Desativar" class="fa fa-eye-slash fa-lg" style="color: red;" data-original-title="Desativar"></i></a>');
+            } else {
+                texto.push('<a href="#" class="reativar" ><i title="Ativar usuário" class="fa fa-eye fa-lg " data-original-title="Ativar usuário"></i></a>');
+            }
             return texto.join('&nbsp;&nbsp;');
         }
 

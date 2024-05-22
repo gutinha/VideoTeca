@@ -17,6 +17,27 @@
 
 }
 
+<style type="text/css">
+
+    /*para resolver bug do multiselect*/
+    div#areaUsuario > span.select2.select2-container.select2-container--default {
+        border: none;
+    }
+
+    div#TipoUsuario > span.select2.select2-container.select2-container--default {
+        border: none;
+    }
+
+    .infoCamposObrigatorios {
+        margin-top: 100px;
+    }
+</style>
+
+<div class="text-center mt-5">
+    <h1> <strong>Editar Usuário</strong></h1>
+    <br />
+</div>
+
 @using (Html.BeginForm("EditarUsuario", "Coordenador", FormMethod.Post, new { enctype = "multipart/form-data", id = "editarUsuario", autocomplete = "on" }))
 {
     <div class="container" style="max-width: 100%;">
@@ -72,4 +93,30 @@
         </button>
     </div>
 }
+@section styles
+    {
+    <link href="~/Content/css/select2.min.css" rel="stylesheet" />
+}
 
+@section scripts{
+    <script>
+        $('#AreasUsuario').select2({
+            placeholder: "Selecionar...",
+            minimumInputLength: 2,
+            language: {
+                inputTooShort: function (args) {
+
+                    return "Digite 2 ou mais caracteres.";
+                },
+                noResults: function () {
+                    return "Não Encontrado.";
+                },
+                searching: function () {
+                    return "Procurando...";
+                }
+            }
+        });
+
+    </script>
+
+}

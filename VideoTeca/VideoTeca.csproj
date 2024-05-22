@@ -6010,6 +6010,9 @@
     <Content Include="Views\Coordenador\Index.cshtml" />
     <Content Include="Views\Coordenador\ControleUsuarios.cshtml" />
     <Content Include="Views\Coordenador\EditarUsuario.cshtml" />
+    <Content Include="Views\Coordenador\DetalhesUsuarioModal.cshtml" />
+    <Content Include="Views\Coordenador\ExcluirUsuarioModal.cshtml" />
+    <Content Include="Views\Coordenador\AtivarUsuarioModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,108 @@
+﻿@using VideoTeca.Models
+@model usuario
+@{
+    ViewBag.Title = "Ativar Usuário";
+    Layout = null;
+    List<area> areasUsuario = ViewBag.AreasUsuario;
+    var userTypes = new Dictionary<long, string>
+{
+        { 1, "Usuário" },
+        { 2, "Professor" },
+        { 3, "Avaliador" },
+        { 4, "Dicom" },
+        { 5, "Coordenador" }
+    };
+}
+<style type="text/css">
+
+    /*para resolver bug do multiselect*/
+    div#areaUsuario > span.select2.select2-container.select2-container--default {
+        border: none;
+    }
+
+    div#TipoUsuario > span.select2.select2-container.select2-container--default {
+        border: none;
+    }
+
+    .infoCamposObrigatorios {
+        margin-top: 100px;
+    }
+</style>
+
+<div class="modal-dialog modal-xl">
+    <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <h4 class="modal-title">Ativar Usuário</h4>
+            <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+            <div class="row">
+                <div class="col ">
+                    <div class="card">
+                        <div class="card-header text-white bg-primary" style="font-size: 28px;">Dados do Usuário</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="row">
+                                        <div class="form-group col-lg-7" id="BuscaSecurity">
+                                            <label for="IdUsuarioSecurityPessoa" class="control-label">Usuário:</label>
+                                            <br />
+                                            <input id="IdUsuarioSecurityPessoa" value="@Model.nome (@Model.email)" autocomplete="off" type="text" class="form-control" tabindex="4" disabled="" color: #0c0c0c; />
+                                        </div>
+                                        <div class="form-group col-lg-4" id="TipoUsuario">
+                                            <label for="TipoUsuario" class="control-label">Tipo de Usuário:</label>
+                                            <br />
+                                            <select class="form-control" id="TipoUsuario" name="TipoUsuario" tabindex="14" style="color: #0c0c0c;" disabled="" required="">
+                                                <option value="@Model.permission">@userTypes[Model.permission]</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-lg-2" id="areaUsuario">
+                                            <label for="Areas" class="control-label">Áreas vinculadas:</label>
+                                            <br />
+                                            <select class="form-control" id="AreasUsuario" name="AreasUsuario[]" multiple="multiple" tabindex="14" style="color: #0c0c0c; height: 100px" disabled>
+                                                @foreach (var areasUser in areasUsuario)
+                                                {
+                                                    <option selected value="@areasUser.id">@areasUser.nome</option>
+                                                }
+                                            </select>
+                                            <br />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+        </div>
+        <div class="modal-footer">
+            @using (Html.BeginForm())
+            {
+                <input id="idUsuario" name="idUsuario" type="hidden" value="@Model.id">
+                <button type="submit" class="btn btn-success">Ativar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="fecharBtn">Fechar</button>
+            }
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $('#AreasUsuario').select2({
+        placeholder: "Selecionar...",
+        language: {
+            noResults: function () {
+                return "Não Encontrado.";
+            },
+            searching: function () {
+                return "Procurando...";
+            }
+        }
+    });
+
+</script>
