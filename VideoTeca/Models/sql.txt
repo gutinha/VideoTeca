@@ -1,7 +1,6 @@
 ﻿-- DROP SCHEMA dbo;
 
 CREATE SCHEMA dbo;
--- videoteca.dbo.AspNetRoles definition
 
 -- videoteca.dbo.area definition
 
@@ -10,8 +9,9 @@ CREATE SCHEMA dbo;
 -- DROP TABLE videoteca.dbo.area;
 
 CREATE TABLE videoteca.dbo.area (
-	id bigint IDENTITY(0,1) NOT NULL,
+	id bigint IDENTITY(1,1) NOT NULL,
 	nome nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	active bit DEFAULT 1 NOT NULL,
 	CONSTRAINT area_pk PRIMARY KEY (id)
 );
 
@@ -23,27 +23,9 @@ CREATE TABLE videoteca.dbo.area (
 -- DROP TABLE videoteca.dbo.status;
 
 CREATE TABLE videoteca.dbo.status (
-	id bigint IDENTITY(0,1) NOT NULL,
+	id bigint IDENTITY(1,1) NOT NULL,
 	nome nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	CONSTRAINT status_pk PRIMARY KEY (id)
-);
-
-
--- videoteca.dbo.usuario definition
-
--- Drop table
-
--- DROP TABLE videoteca.dbo.usuario;
-
-CREATE TABLE videoteca.dbo.usuario (
-	id bigint IDENTITY(0,1) NOT NULL,
-	nome nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	email nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	password nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	permission bigint DEFAULT 1 NOT NULL,
-	active bit DEFAULT 1 NOT NULL,
-	CONSTRAINT usuario_pk PRIMARY KEY (id),
-	CONSTRAINT usuario_unique UNIQUE (email)
 );
 
 
@@ -54,11 +36,43 @@ CREATE TABLE videoteca.dbo.usuario (
 -- DROP TABLE videoteca.dbo.subarea;
 
 CREATE TABLE videoteca.dbo.subarea (
-	id bigint IDENTITY(0,1) NOT NULL,
+	id bigint IDENTITY(1,1) NOT NULL,
 	nome nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	active bit DEFAULT 1 NOT NULL,
+	CONSTRAINT subarea_pk PRIMARY KEY (id)
+);
+
+
+-- videoteca.dbo.usuario definition
+
+-- Drop table
+
+-- DROP TABLE videoteca.dbo.usuario;
+
+CREATE TABLE videoteca.dbo.usuario (
+	id bigint IDENTITY(1,1) NOT NULL,
+	nome nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	email nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	password nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	permission bigint DEFAULT 1 NOT NULL,
+	active bit DEFAULT 1 NOT NULL,
+	CONSTRAINT usuario_pk PRIMARY KEY (id),
+	CONSTRAINT usuario_unique UNIQUE (email)
+);
+
+
+-- videoteca.dbo.usuarios_areas definition
+
+-- Drop table
+
+-- DROP TABLE videoteca.dbo.usuarios_areas;
+
+CREATE TABLE videoteca.dbo.usuarios_areas (
 	id_area bigint NOT NULL,
-	CONSTRAINT subarea_pk PRIMARY KEY (id),
-	CONSTRAINT subarea_area_FK FOREIGN KEY (id_area) REFERENCES videoteca.dbo.area(id)
+	id_usuario bigint NOT NULL,
+	CONSTRAINT usuarios_areas_pk PRIMARY KEY (id_area,id_usuario),
+	CONSTRAINT usuarios_areas_area_FK FOREIGN KEY (id_area) REFERENCES videoteca.dbo.area(id),
+	CONSTRAINT usuarios_areas_usuario_FK FOREIGN KEY (id_usuario) REFERENCES videoteca.dbo.usuario(id)
 );
 
 
@@ -69,7 +83,7 @@ CREATE TABLE videoteca.dbo.subarea (
 -- DROP TABLE videoteca.dbo.video;
 
 CREATE TABLE videoteca.dbo.video (
-	id bigint IDENTITY(0,1) NOT NULL,
+	id bigint IDENTITY(1,1) NOT NULL,
 	url nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	titulo nvarchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	descricao nvarchar(4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
@@ -105,21 +119,15 @@ CREATE TABLE videoteca.dbo.video_avaliacoes (
 );
 
 
--- videoteca.dbo.usuarios_areas definition
+-- videoteca.dbo.subareas_areas definition
 
 -- Drop table
 
--- DROP TABLE videoteca.dbo.usuarios_areas;
+-- DROP TABLE videoteca.dbo.subareas_areas;
 
-CREATE TABLE videoteca.dbo.usuarios_areas (
+CREATE TABLE videoteca.dbo.subareas_areas (
 	id_area bigint NOT NULL,
-	id_usuario bigint NOT NULL,
-	CONSTRAINT usuarios_areas_pk PRIMARY KEY (id_area,id_usuario),
-	CONSTRAINT usuarios_areas_area_FK FOREIGN KEY (id_area) REFERENCES videoteca.dbo.area(id),
-	CONSTRAINT usuarios_areas_usuario_FK FOREIGN KEY (id_usuario) REFERENCES videoteca.dbo.usuario(id)
+	id_subarea bigint NOT NULL,
+	CONSTRAINT subareas_areas_area_FK FOREIGN KEY (id_area) REFERENCES videoteca.dbo.area(id),
+	CONSTRAINT subareas_areas_subarea_FK FOREIGN KEY (id_subarea) REFERENCES videoteca.dbo.subarea(id)
 );
-
-INSERT INTO videoteca.dbo.status (nome) VALUES
-	 ('Pendente'),
-	 ('Recusado'),
-	 ('Aprovado');
