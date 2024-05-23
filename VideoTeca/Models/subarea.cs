@@ -13,6 +13,7 @@ namespace VideoTeca.Models
         public subarea()
         {
             video = new HashSet<video>();
+            area = new HashSet<area>();
         }
 
         public long id { get; set; }
@@ -21,11 +22,12 @@ namespace VideoTeca.Models
         [StringLength(255)]
         public string nome { get; set; }
 
-        public long id_area { get; set; }
-
-        public virtual area area { get; set; }
+        public bool active { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<video> video { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<area> area { get; set; }
     }
 }

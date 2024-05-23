@@ -24,16 +24,15 @@ namespace VideoTeca.Models
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<area>()
-                .HasMany(e => e.subarea)
+                .HasMany(e => e.video)
                 .WithRequired(e => e.area)
                 .HasForeignKey(e => e.id_area)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<area>()
-                .HasMany(e => e.video)
-                .WithRequired(e => e.area)
-                .HasForeignKey(e => e.id_area)
-                .WillCascadeOnDelete(false);
+                .HasMany(e => e.subarea)
+                .WithMany(e => e.area)
+                .Map(m => m.ToTable("subareas_areas").MapLeftKey("id_area").MapRightKey("id_subarea"));
 
             modelBuilder.Entity<area>()
                 .HasMany(e => e.usuario)

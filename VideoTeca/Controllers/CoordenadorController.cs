@@ -235,5 +235,58 @@ namespace VideoTeca.Controllers
             return Json(new { total = totalItens, rows = resultados }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult ListarAreasAjax(string search, string sort, string order, int? limit = 10, int? offset = 0)
+        {
+            //long userLogado = Convert.ToInt64(Session["id_user"]);
+            IQueryable<area> areas = db.area;
+
+            int quantidade = limit ?? 10;
+            int pagina = offset ?? 0;
+
+            switch (sort)
+            {
+                case "nome":
+                    if (order.Equals("asc"))
+                    {
+                        areas = areas.OrderBy(x => x.nome);
+                    }
+                    else
+                    {
+                        areas = areas.OrderByDescending(x => x.nome);
+                    }
+                    break;
+
+                default:
+                    areas = areas.OrderBy(x => x.nome);
+                    break;
+            }
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                try
+                {
+                    areas = areas.Where(v => v.nome.ToLower().Contains(search.ToLower()));
+                }
+                catch (Exception)
+                {
+                    areas = areas.Where(v => v.nome.ToLower().Contains(search.ToLower()));
+                }
+            }
+
+            int totalItens = areas.Count();
+
+            var resultados = areas.Skip(pagina)
+                                    .Take(quantidade)
+                                    .ToList()
+                                    .Select(x => new
+                                    {
+                                        id = x.id,
+                                        x.nome,
+                                        x.active,
+                                    }).ToList();
+
+            return Json(new { total = totalItens, rows = resultados }, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

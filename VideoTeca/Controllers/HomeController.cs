@@ -108,7 +108,16 @@ namespace VideoTeca.Controllers
 
         public ActionResult BuscarSubArea(int id)
         {
-            var subAreas = db.subarea.Where(x => x.id_area == id).ToList().Select(a => new { Id = a.id, Nome = a.nome });
+            //var subAreas = db.subarea.Where(x => x.id_area == id).ToList().Select(a => new { Id = a.id, Nome = a.nome });
+            var subAreas = db.area
+            .Where(a => a.id == id)
+            .SelectMany(a => a.subarea)
+            .Select(sa => new
+            {
+                Id = sa.id,
+                Nome = sa.nome
+            })
+            .ToList();
             return Json(subAreas, JsonRequestBehavior.AllowGet);
         }
 

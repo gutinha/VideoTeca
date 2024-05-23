@@ -78,7 +78,7 @@ namespace VideoTeca.Controllers
         public ActionResult ListarVideosEnviadosAjax(string search, string sort, string order, int? Area, int? SubArea, int? limit = 10, int? offset = 0)
         {
             long userLogado = Convert.ToInt64(Session["id_user"]);
-            var user = db.usuario.Include(u => u.area).Where(x => x.id == userLogado).First();
+            var user = db.usuario.Where(x => x.id == userLogado).First();
             IQueryable<video> videos = db.video.Where(v => v.active == true && 
                                                       v.area.usuario.Any(u=> u.id == user.id) && 
                                                       v.aprovado == false &&

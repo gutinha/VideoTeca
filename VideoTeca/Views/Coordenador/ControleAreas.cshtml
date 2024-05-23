@@ -1,0 +1,148 @@
+﻿@using VideoTeca.Models
+@{
+    ViewBag.Title = "Controle de Áreas";
+    List<area> areas = ViewBag.Areas;
+}
+
+<div class="list-group" style="margin-top: 5px;">
+    <span class="list-group-item active">
+        <h3 class="list-group-item-heading" align="center">Listagem de Áreas</h3>
+    </span>
+    <div class="panel panel-primary table-responsive">
+    </div>
+</div>
+<br />
+<table id="table"
+       data-toolbar="#filtro"
+       data-search="true"
+       data-show-refresh="false"
+       data-show-toggle="false"
+       data-show-columns="false"
+       data-show-export="true"
+       data-detail-view="false"
+       data-detail-formatter="detailFormatter"
+       data-show-pagination-switch="false"
+       data-pagination="true"
+       data-id-field="id"
+       data-page-list="[10, 25, 50, 100]"
+       data-show-footer="false"
+       data-side-pagination="server"
+       data-url="@Url.Action("ListarAreasAjax","Coordenador")"
+       data-locale="pt-BR"></table>
+@section styles {
+    <link href="~/Content/lib/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" />
+    <style>
+        a:hover {
+            cursor: pointer;
+        }
+    </style>
+}
+@section scripts{
+    <script src="~/Content/lib/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="~/Content/lib/bootstrap-table/locale/bootstrap-table-pt-BR.min.js"></script>
+    <link href="~/Content/css/select2.min.css" rel="stylesheet" />
+    <script>
+        $(function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+        var $table = $('#table');
+        $(function() {
+            $table.bootstrapTable({
+                columns:
+                [
+                    {
+                        title: 'Item ID',
+                        field: 'id',
+                        visible: false
+                        },
+                    {
+                        title: 'Ativo',
+                        field: 'active',
+                        visible: false
+                    },
+                    {
+                        title: 'Nome',
+                        field: 'nome',
+                        align: 'center',
+                        sortable: true
+                    },
+                    {
+                        title: 'Ação',
+                        field: 'operate',
+                        align: 'center',
+                        events: eventos,
+                        formatter: operateFormatter,
+                        width: '200px'
+                    }
+                ]
+            });
+        });
+
+        window.eventos = {
+
+            'click .excluir': function(e, value, row, index) {
+                var url = '@Url.Action("ExcluirAreaModal", "Coordenador")/' + row.id;
+                $("#myModal").load(url);
+                $("#myModal").modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                $("#myModal").modal('show');
+            },
+
+            'click .reativar': function(e, value, row, index) {
+                var url = '@Url.Action("AtivarAreaModal", "Coordenador")/' + row.id;
+                $("#myModal").load(url);
+                $("#myModal").modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                $("#myModal").modal('show');
+            }
+        };
+
+        function operateFormatter(value, row, index) {
+            var texto = [];
+            texto.push('<a href="@Url.Action("DetalhesArea", "Coordenador")/' + row.id + '" class="informacao" ><i title="Informações" class="fas fa-search fa-lg " data-original-title="Informações"></i></a>');
+            texto.push('<a href="@Url.Action("EditarArea", "Coordenador")/' + row.id + '"><i title="Editar" class="fas fa-edit fa-lg" data-original-title="Editar"></i></a>');
+            if (row.active == 1) {
+                texto.push('<a href="#" class="excluir" ><i title="Desativar" class="fa fa-eye-slash fa-lg" style="color: red;" data-original-title="Desativar"></i></a>');
+            } else {
+                texto.push('<a href="#" class="reativar" ><i title="Ativar usuário" class="fa fa-eye fa-lg " data-original-title="Ativar usuário"></i></a>');
+            }
+            return texto.join('&nbsp;&nbsp;');
+        }
+
+        $(document).ready(function() {
+            $('input.form-control').focus();
+        });
+
+       /* $(document).ready(function () {
+
+            $("#Area").select2({
+                placeholder: "Selecionar...",
+                language: {
+                    noResults: function () {
+                        return "Não Encontrado.";
+                    },
+                    searching: function () {
+                        return "Procurando...";
+                    }
+                }
+            });
+        });*/
+
+        $( ".filtro" ).change(function() {
+           /* alert("Handler for .change() called.");*/
+            //var area = $('#Area').val();
+            var link = '@Url.Action("ListarAreasAjax", "Coordenador")';
+            $table.bootstrapTable('refresh', { url: link });
+        });
+
+
+    </script>
+}
+
+
+
