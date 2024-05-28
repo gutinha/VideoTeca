@@ -1,59 +1,67 @@
-﻿<ul class="navbar-nav  sidebar bg-light accordion border-right" id="accordionSidebar">
-    <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="@Url.Action("Index","Home")">
-        <div class="sidebar-brand-icon ">
-            <img style="width: 35px; height: auto" src="https://www.unitins.br/uniPerfil/Logomarca/Imagem/5b98288311bfe57cfb710d848f1d7fef" />
+﻿@{
+    var perm = Convert.ToInt64(Session["role"]);
+    <ul class="navbar-nav  sidebar bg-light accordion border-right" id="accordionSidebar">
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="@Url.Action("Index", "Home")">
+            <div class="sidebar-brand-icon ">
+                <img style="width: 35px; height: auto" src="https://www.unitins.br/uniPerfil/Logomarca/Imagem/5b98288311bfe57cfb710d848f1d7fef" />
+            </div>
+            <div class="sidebar-brand-text mx-3">
+                <img style="width: 100%; height: auto" src="https://www.unitins.br/uniPerfil/Logomarca/Imagem/09997c779523a61bd01bb69b0a789242" />
+            </div>
+        </a>
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Index", "Home")">
+                <i class="fas fa-fw fa-home"></i>
+                <span>Página Inicial</span>
+            </a>
+        </li>
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+
+
+        @if (perm >= 2)
+        {
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Index", "Professor")">
+                    <i class="fas fa-fw fa-book-open"></i>
+                    <span>Professor</span>
+                </a>
+            </li>
+        }
+
+        @if (perm == 3 || perm == 5)
+        {
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Index", "Avaliador")">
+                    <i class="fas fa-fw fa-award"></i>
+                    <span>Avaliador</span>
+                </a>
+            </li>
+        }
+        @if (perm == 5)
+        {
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Index", "Coordenador")">
+                    <i class="fas fa-fw fa-user-cog"></i>
+                    <span>Coordenador</span>
+                </a>
+            </li>
+        }
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
         </div>
-        <div class="sidebar-brand-text mx-3">
-            <img style="width: 100%; height: auto" src="https://www.unitins.br/uniPerfil/Logomarca/Imagem/09997c779523a61bd01bb69b0a789242" />
-        </div>
-    </a>
-    <!-- Divider -->
-    <hr class="sidebar-divider my-0">
-    <li class="nav-item">
-        <a class="nav-link" href="@Url.Action("Index","Home")">
-            <i class="fas fa-fw fa-home"></i>
-            <span>Página Inicial</span>
-        </a>
-    </li>
-    <!-- Divider -->
-    <hr class="sidebar-divider">
+    </ul>
 
-
-
-
-    <li class="nav-item">
-        <a class="nav-link" href="@Url.Action("Index", "Professor")">
-            <i class="fas fa-fw fa-book-open"></i>
-            <span>Professor</span>
-        </a>
-    </li>
-
-
-    <li class="nav-item">
-        <a class="nav-link" href="@Url.Action("Index", "Avaliador")">
-            <i class="fas fa-fw fa-award"></i>
-            <span>Avaliador</span>
-        </a>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link" href="@Url.Action("Index", "Coordenador")">
-            <i class="fas fa-fw fa-user-cog"></i>
-            <span>Coordenador</span>
-        </a>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
-    <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
-</ul>
-
-<style>
-    .sidebar .nav-item .nav-link {
-        color: #495057;
-    }
-</style>
+    <style>
+        .sidebar .nav-item .nav-link {
+            color: #495057;
+        }
+    </style>
+}

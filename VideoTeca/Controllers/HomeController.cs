@@ -60,6 +60,8 @@ namespace VideoTeca.Controllers
             }
 
             Session["id_user"] = usuario.id.ToString();
+            Session["nome"] = usuario.nome;
+            Session["role"] = usuario.permission.ToString();
             TempData["s"] = "Login realizado com sucesso!";
             return RedirectToAction("Index", "Home");
 

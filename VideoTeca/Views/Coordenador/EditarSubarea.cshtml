@@ -1,0 +1,42 @@
+﻿@using VideoTeca.Models
+@model subarea
+@{
+    ViewBag.Title = "Editar Subárea";
+}
+<div class="text-center mt-5">
+    <h1> <strong>Editar Subárea</strong></h1>
+    <br />
+</div>
+
+@using (Html.BeginForm("EditarSubarea", "Coordenador", FormMethod.Post, new { enctype = "multipart/form-data", id = "editarSubarea", autocomplete = "on" }))
+{
+    <div class="container" style="max-width: 100%;">
+        <div class="row row-cols-1 row-cols-md-3">
+            <div class="col ">
+                <div class="card">
+                    <div class="card-header text-white bg-primary" style="font-size: 28px;">Dados da Subárea</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="form-group col-lg-7" id="area">
+                                        <label for="usuario" class="control-label">Subárea:</label>
+                                        <br />
+                                        <input id="Nome" name="Nome" value="@Model.nome" autocomplete="off" type="text" class="form-control" tabindex="4" style="color: #0c0c0c;" required />
+                                        <input id="idSubarea" name="idSubarea" type="hidden" required value="@Model.id" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="float:right;margin-top:10px;">
+        <a id="btn-back" href="@Url.Action("ControleSubareas", "Coordenador")" class="btn btn-info">Voltar</a>
+        <button type="submit" class="btn btn-success" id="btnEnvia" name="btnEnvia">
+            <span class="fa fa-save fa-w-2"></span>&nbsp;&nbsp;Salvar
+        </button>
+    </div>
+}

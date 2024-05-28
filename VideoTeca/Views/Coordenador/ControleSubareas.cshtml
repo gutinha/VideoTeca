@@ -1,13 +1,13 @@
 ﻿@using VideoTeca.Models
 @{
-    ViewBag.Title = "Controle de Áreas";
+    ViewBag.Title = "Controle de Subáreas";
 }
 <div class="page-header" align="right">
     <div class="pull-right novo-page-header">
-        <a href="@Url.Action("CriarArea", "Coordenador")">
+        <a href="@Url.Action("CriarSubarea", "Coordenador")">
             <button type="button" class="btn btn-primary">
-                <i class="fa fa-plus fa-1x" data-original-title="Criar área" data-toggle="tooltip" data-placement="top" title="Criar área"> </i>
-                &nbsp;&nbsp;Nova Área
+                <i class="fa fa-plus fa-1x" data-original-title="Criar Subárea" data-toggle="tooltip" data-placement="top" title="Criar Subárea"> </i>
+                &nbsp;&nbsp;Nova Subárea
             </button>
         </a>
     </div>
@@ -15,7 +15,7 @@
 <br />
 <div class="list-group" style="margin-top: 5px;">
     <span class="list-group-item active">
-        <h3 class="list-group-item-heading" align="center">Listagem de Áreas</h3>
+        <h3 class="list-group-item-heading" align="center">Listagem de Subáreas</h3>
     </span>
     <div class="panel panel-primary table-responsive">
     </div>
@@ -36,7 +36,7 @@
        data-page-list="[10, 25, 50, 100]"
        data-show-footer="false"
        data-side-pagination="server"
-       data-url="@Url.Action("ListarAreasAjax","Coordenador")"
+       data-url="@Url.Action("ListarSubareasAjax","Coordenador")"
        data-locale="pt-BR"></table>
 @section styles {
     <link href="~/Content/lib/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" />
@@ -91,7 +91,7 @@
         window.eventos = {
 
             'click .excluir': function(e, value, row, index) {
-                var url = '@Url.Action("ExcluirAreaModal", "Coordenador")/' + row.id;
+                var url = '@Url.Action("ExcluirSubareaModal", "Coordenador")/' + row.id;
                 $("#myModal").load(url);
                 $("#myModal").modal({
                     backdrop: 'static',
@@ -101,7 +101,7 @@
             },
 
             'click .informacao': function(e, value, row, index) {
-                var url = '@Url.Action("DetalhesAreaModal", "Coordenador")/' + row.id;
+                var url = '@Url.Action("DetalhesSubareaModal", "Coordenador")/' + row.id;
                 $("#myModal").load(url);
                 $("#myModal").modal({
                     backdrop: 'static',
@@ -111,7 +111,7 @@
             },
 
             'click .reativar': function(e, value, row, index) {
-                var url = '@Url.Action("AtivarAreaModal", "Coordenador")/' + row.id;
+                var url = '@Url.Action("AtivarSubareaModal", "Coordenador")/' + row.id;
                 $("#myModal").load(url);
                 $("#myModal").modal({
                     backdrop: 'static',
@@ -124,7 +124,7 @@
         function operateFormatter(value, row, index) {
             var texto = [];
             texto.push('<a href="#" class="informacao" ><i title="Informações" class="fas fa-search fa-lg " data-original-title="Informações"></i></a>');
-            texto.push('<a href="@Url.Action("EditarArea", "Coordenador")/' + row.id + '"><i title="Editar" class="fas fa-edit fa-lg" data-original-title="Editar"></i></a>');
+            texto.push('<a href="@Url.Action("EditarSubarea", "Coordenador")/' + row.id + '"><i title="Editar" class="fas fa-edit fa-lg" data-original-title="Editar"></i></a>');
             if (row.active == 1) {
                 texto.push('<a href="#" class="excluir" ><i title="Desativar" class="fa fa-eye-slash fa-lg" style="color: red;" data-original-title="Desativar"></i></a>');
             } else {
@@ -155,7 +155,7 @@
         $( ".filtro" ).change(function() {
            /* alert("Handler for .change() called.");*/
             //var area = $('#Area').val();
-            var link = '@Url.Action("ListarAreasAjax", "Coordenador")';
+            var link = '@Url.Action("ListarSubareasAjax", "Coordenador")';
             $table.bootstrapTable('refresh', { url: link });
         });
 

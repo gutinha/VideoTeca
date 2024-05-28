@@ -63,7 +63,7 @@
                                         <div class="form-group col-lg-2" id="areaUsuario">
                                             <label for="Areas" class="control-label">Áreas vinculadas:</label>
                                             <br />
-                                            <select class="form-control" id="AreasUsuario" name="AreasUsuario[]" multiple="multiple" tabindex="14" style="color: #0c0c0c; height: 100px" disabled>
+                                            <select class="form-control" id="AreasUsuario" name="AreasUsuario[]" multiple="multiple" tabindex="14" style="color: #0c0c0c; height: 100px; width: auto; min-width: 150px;" disabled>
                                                 @foreach (var areasUser in areasUsuario)
                                                 {
                                                     <option selected value="@areasUser.id">@areasUser.nome</option>

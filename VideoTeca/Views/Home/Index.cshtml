@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "Início";
+    var perm = Convert.ToInt64(Session["role"]);
 }
 
 <div class="container mb-5">
@@ -25,7 +26,7 @@
                 </div>
             </div>
         </div>
-
+        @if(perm == 3 || perm == 5) { 
         <div class="col mt-5">
             <div class="card border-0 shadow h-100">
                 <div class="card-header text-white bg-primary">Avalie os videos</div>
@@ -39,7 +40,8 @@
                 </div>
             </div>
         </div>
-
+        }
+        @if(perm >= 2) { 
         <div class="col mt-5">
             <div class="card border-0 shadow h-100">
                 <div class="card-header text-white bg-primary">Envie seu video</div>
@@ -49,11 +51,12 @@
                     </p>
                 </div>
                 <div class="card-footer">
-                    <a href="@Url.Action("ListarVideos", "Home")" class="stretched-link text-decoration-none"><i class="fas fa-award fa-fw"></i> <strong>Acesso ao formulário</strong></a>
+                    <a href="@Url.Action("Index", "Professor")" class="stretched-link text-decoration-none"><i class="fas fa-award fa-fw"></i> <strong>Acessar</strong></a>
                 </div>
             </div>
         </div>
-
+        }
+        @if(perm == 5) { 
         <div class="col mt-5">
             <div class="card border-0 shadow h-100">
                 <div class="card-header text-white bg-primary">Coordenador</div>
@@ -67,7 +70,7 @@
                 </div>
             </div>
         </div>
-
+        }
         <div class="col mt-5">
             <div class="card border-0 shadow h-100">
                 <div class="card-header text-white bg-primary">Usuário</div>

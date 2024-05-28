@@ -1,0 +1,94 @@
+﻿@using VideoTeca.Models
+@model area
+@{
+    ViewBag.Title = "Editar Área";
+    List<subarea> subareas = ViewBag.Subareas;
+    List<subarea> subareasArea = ViewBag.SubareasAreas;
+}
+
+<style type="text/css">
+
+    /*para resolver bug do multiselect*/
+    div#areaSubarea > span.select2.select2-container.select2-container--default {
+        border: none;
+    }
+
+</style>
+
+<div class="text-center mt-5">
+    <h1> <strong>Editar Área</strong></h1>
+    <br />
+</div>
+
+@using (Html.BeginForm("EditarArea", "Coordenador", FormMethod.Post, new { enctype = "multipart/form-data", id = "editarArea", autocomplete = "on" }))
+{
+    <div class="container" style="max-width: 100%;">
+        <div class="row row-cols-1 row-cols-md-3">
+            <div class="col ">
+                <div class="card">
+                    <div class="card-header text-white bg-primary" style="font-size: 28px;">Dados da Área</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="form-group col-lg-7" id="area">
+                                        <label for="usuario" class="control-label">Área:</label>
+                                        <br />
+                                        <input disabled id="Nome" name="Nome" value="@Model.nome" autocomplete="off" type="text" class="form-control" tabindex="4" style="color: #0c0c0c;" required />
+                                        <input id="idArea" name="idArea" type="hidden" required value="@Model.id" />
+                                    </div>
+                                    <div class="col-lg-12" id="areaSubarea">
+                                        <label for="AreasSubarea" class="control-label">Subáreas Vinculadas a Área*:</label>
+                                        <select class="form-control" id="AreasSubarea" name="AreasSubarea[]" multiple="multiple" tabindex="14" style="color: #0c0c0c; height: 100px">
+                                            @foreach (var subareaA in subareasArea)
+                                            {
+                                                <option selected value="@subareaA.id">@subareaA.nome</option>
+                                            }
+                                            @foreach (var subarea in subareas)
+                                            {
+                                                <option value="@subarea.id">@subarea.nome</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="float:right;margin-top:10px;">
+        <a id="btn-back" href="@Url.Action("ControleAreas", "Coordenador")" class="btn btn-info">Voltar</a>
+        <button type="submit" class="btn btn-success" id="btnEnvia" name="btnEnvia">
+            <span class="fa fa-save fa-w-2"></span>&nbsp;&nbsp;Salvar
+        </button>
+    </div>
+}
+@section styles
+    {
+    <link href="~/Content/css/select2.min.css" rel="stylesheet" />
+}
+
+@section scripts{
+    <script>
+        $('#AreasSubarea').select2({
+            placeholder: "Selecionar...",
+            minimumInputLength: 2,
+            language: {
+                inputTooShort: function (args) {
+
+                    return "Digite 2 ou mais caracteres.";
+                },
+                noResults: function () {
+                    return "Não Encontrado.";
+                },
+                searching: function () {
+                    return "Procurando...";
+                }
+            }
+        });
+
+    </script>
+
+}

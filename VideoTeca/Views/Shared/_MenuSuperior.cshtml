@@ -1,8 +1,7 @@
 ﻿@using VideoTeca.Models
 @{
-
+    var nome = Convert.ToString(Session["nome"]);
     string foto = Util.BaseUrl("/Content/images/user-image.jpg");
-
     <div class="shadow">
         <nav class="navbar navbar-expand navbar-light bg-light topbar mb-4 static-top">
             @*<button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -12,9 +11,18 @@
                 <a class="dropdown-toggle nav-link" id="dropdownMenu2" data-toggle="dropdown" href="#">
                     <h4 style="margin-bottom: 0.2rem;">Videoteca UNI</h4>
                 </a>
-                <div class="dropdown-menu" aria-labellebancoy="dropdownMenu2" style="min-width: 400px;">
-                        <a class="dropdown-item" href="s.refirect">nomeExibição</a>
-                </div>
+                @if (!string.IsNullOrEmpty(nome))
+                {
+                    <div class="dropdown-menu" aria-labellebancoy="dropdownMenu2" style="min-width: 400px;">
+                        <a class="dropdown-item" href="s.refirect">@nome</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="dropdown-menu" aria-labellebancoy="dropdownMenu2" style="min-width: 400px;">
+                        <a class="dropdown-item" href="@Url.Action("Login", "Home")">Login</a>
+                    </div>
+                }
             </div>
 
             <ul class="navbar-nav">
@@ -23,9 +31,9 @@
                         <i class="fa fa-bars"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labellebancoy="searchDropdown">
-                        
-                            <a class="dropdown-item" href="s.UrlRedirect">nomeExibicao</a>
-                        
+
+                        <a class="dropdown-item" href="s.UrlRedirect">nomeExibicao</a>
+
                     </div>
                 </li>
             </ul>
@@ -33,10 +41,22 @@
 
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">Nome Pessoa</span>
-                        <img style="height: 2.5rem; width: 2.5rem;" class="img-profile rounded-circle" src="@foto">
-                    </a>
+                    @if (!string.IsNullOrEmpty(nome))
+                    {
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">@nome</span>
+
+                            <img style="height: 2.5rem; width: 2.5rem;" class="img-profile rounded-circle" src="@foto">
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="nav-link dropdown-toggle" href="@Url.Action("Login", "Home")" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small" href="@Url.Action("Login", "Home")">Login</span>
+                            <img style="height: 2.5rem; width: 2.5rem;" class="img-profile rounded-circle" src="@foto">
+                        </a>
+                    }
 
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labellebancoy="userDropdown">
                         <a class="dropdown-item" href="Model.Apps.path/Account/EditMe">
@@ -48,7 +68,7 @@
                             Alterar Senha
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="Util.BaseUrl("/SecurityAccount/Sair")">
+                        <a class="dropdown-item" href="Util.BaseUrl(" /SecurityAccount/Sair")">
                             <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-danger"></i>
                             Sair
                         </a>

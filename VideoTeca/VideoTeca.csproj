@@ -6014,6 +6014,17 @@
     <Content Include="Views\Coordenador\ExcluirUsuarioModal.cshtml" />
     <Content Include="Views\Coordenador\AtivarUsuarioModal.cshtml" />
     <Content Include="Views\Coordenador\ControleAreas.cshtml" />
+    <Content Include="Views\Coordenador\DetalhesAreaModal.cshtml" />
+    <Content Include="Views\Coordenador\ExcluirAreaModal.cshtml" />
+    <Content Include="Views\Coordenador\AtivarAreaModal.cshtml" />
+    <Content Include="Views\Coordenador\CriarArea.cshtml" />
+    <Content Include="Views\Coordenador\EditarArea.cshtml" />
+    <Content Include="Views\Coordenador\ControleSubareas.cshtml" />
+    <Content Include="Views\Coordenador\CriarSubarea.cshtml" />
+    <Content Include="Views\Coordenador\ExcluirSubareaModal.cshtml" />
+    <Content Include="Views\Coordenador\DetalhesSubareaModal.cshtml" />
+    <Content Include="Views\Coordenador\AtivarSubareaModal.cshtml" />
+    <Content Include="Views\Coordenador\EditarSubarea.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
