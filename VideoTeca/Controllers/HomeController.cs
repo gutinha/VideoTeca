@@ -94,8 +94,13 @@ namespace VideoTeca.Controllers
 
                     db.usuario.Add(user);
                     db.SaveChanges();
-                    Session["id_user"] = user.id.ToString();
                     transaction.Commit();
+
+                    Session["id_user"] = user.id.ToString();
+                    Session["nome"] = user.nome;
+                    Session["role"] = user.permission.ToString();
+                    TempData["s"] = "Conta criada com sucesso!";
+                    return RedirectToAction("Index", "Home");
                 }
                 catch (Exception ex)
                 {
@@ -104,8 +109,7 @@ namespace VideoTeca.Controllers
                     return RedirectToAction("Index", "Home");
                 }
             }
-            TempData["s"] = "Conta criada com sucesso!";
-            return RedirectToAction("Index", "Home");
+            
         }
 
         public ActionResult BuscarSubArea(int id)
