@@ -6025,6 +6025,8 @@
     <Content Include="Views\Coordenador\DetalhesSubareaModal.cshtml" />
     <Content Include="Views\Coordenador\AtivarSubareaModal.cshtml" />
     <Content Include="Views\Coordenador\EditarSubarea.cshtml" />
+    <Content Include="Views\Coordenador\ControleVideos.cshtml" />
+    <Content Include="Views\Coordenador\DetalhesVideo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

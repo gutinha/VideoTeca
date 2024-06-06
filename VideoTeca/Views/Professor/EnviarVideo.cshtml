@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Enviar video";
     List<area> areas = ViewBag.Areas;
+    bool termos = ViewBag.Termos;
 }
 
 @using (Html.BeginForm("EnviarVideo", "Professor", FormMethod.Post, new { enctype = "multipart/form-data", id = "enviarVideo", autocomplete = "on" }))
@@ -41,15 +42,15 @@
             </div>
         </div>
     </div>
-    <div class="form-group form-check">
-        <a class="btn btn-primary" style="float: right; color: white; text-decoration: none; " id="aceitarTermos" name="aceitarTermos">Aceitar termos</a>
-    </div>
-    <button type="submit" class="btn btn-primary offset-11" style="float:right" id="enviarBtn" disabled>Enviar</button>
+        <div class="form-group form-check">
+            <a class="btn btn-primary" style="float: right; color: white; text-decoration: none; @(termos ? "display:none;" : "")" id="aceitarTermos" name="aceitarTermos">Aceitar termos</a>
+        </div>
+    <button type="submit" class="btn btn-primary offset-11" style="float:right" id="enviarBtn" @(termos ? "" : "disabled")>Enviar</button>
 }
 
 @section Scripts {
     <script>
-        
+
         document.getElementById('aceitarTermos').addEventListener('click', function() {
             var url = '@Url.Action("AceitarTermosModal", "Professor")';
             $("#myModal").load(url);
@@ -59,7 +60,7 @@
             });
             $("#myModal").modal('show');
         });
-        
+
         function fetchSubAreas() {
             var areaId = $('#floatingSelect1').val();
             $.ajax({

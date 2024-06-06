@@ -1,0 +1,235 @@
+﻿@using VideoTeca.Models
+@{
+    ViewBag.Title = "Controle de Videos";
+    List<area> areas = ViewBag.Areas;
+}
+
+<div class="list-group" style="margin-top: 5px;">
+    <span class="list-group-item active">
+        <h3 class="list-group-item-heading" align="center">Listagem de Videos</h3>
+    </span>
+    <div class="panel panel-primary table-responsive">
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="form-group col-lg-4">
+                <label for="Area" class="control-label">Área</label>
+                <br />
+                <select class="form-control filtro" id="Area" name="Area" tabindex="1">
+                    <option value="0">Todos</option>
+                    @foreach (var area in ViewBag.Areas)
+                    {
+                        <option value="@area.id">@area.nome</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group col-lg-6">
+                <label for="SubArea" class="control-label">Subárea</label>
+                <br />
+                <select class="form-control filtro" id="SubArea" name="SubArea" tabindex="2">
+                    <option value="0">Todos</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+<table id="table"
+       data-toolbar="#filtro"
+       data-search="true"
+       data-show-refresh="false"
+       data-show-toggle="false"
+       data-show-columns="false"
+       data-show-export="true"
+       data-detail-view="false"
+       data-detail-formatter="detailFormatter"
+       data-show-pagination-switch="false"
+       data-pagination="true"
+       data-id-field="id"
+       data-page-list="[10, 25, 50, 100]"
+       data-show-footer="false"
+       data-side-pagination="server"
+       data-url="@Url.Action("ListarVideosAjax","Coordenador")"
+       data-locale="pt-BR"></table>
+@section styles {
+    <link href="~/Content/lib/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" />
+    <style>
+        a:hover {
+            cursor: pointer;
+        }
+    </style>
+}
+@section scripts{
+    <script src="~/Content/lib/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="~/Content/lib/bootstrap-table/locale/bootstrap-table-pt-BR.min.js"></script>
+    <link href="~/Content/css/select2.min.css" rel="stylesheet" />
+    <script>
+        $(function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+        var $table = $('#table');
+        $(function() {
+            $table.bootstrapTable({
+                columns:
+                    [
+                        {
+                            title: 'Item ID',
+                            field: 'id',
+                            visible: false
+                        },
+                        {
+                            title: 'Ativo',
+                            field: 'active',
+                            visible: false
+                        },
+                        {
+                            title: 'Título',
+                            field: 'titulo',
+                            align: 'center',
+                            sortable: true
+                        },
+                        {
+                            title: 'Status',
+                            field: 'id_status',
+                            align: 'center',
+                            //formatter: statusFormatter,
+                            sortable: true
+                        },
+                        {
+                            title: 'Área',
+                            field: 'id_area',
+                            //formatter: areaFormatter,
+                            align: 'center',
+                            sortable: true
+                        },
+                        {
+                            title: 'SubÁrea',
+                            field: 'id_subarea',
+                            // formatter: subAreaFormatter,
+                            align: 'center',
+                            sortable: true
+                        },
+                        {
+                            title: 'Ação',
+                            field: 'operate',
+                            align: 'center',
+                            formatter: operateFormatter,
+                            width: '200px'
+                        }
+                    ]
+            });
+        });
+
+        window.eventos = {
+
+            'click .excluir': function(e, value, row, index) {
+                var url = '@Url.Action("ExcluirVideoModal", "Coordenador")/' + row.id;
+                $("#myModal").load(url);
+                $("#myModal").modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                $("#myModal").modal('show');
+            },
+
+            'click .reativar': function(e, value, row, index) {
+                var url = '@Url.Action("AtivarVideoModal", "Coordenador")/' + row.id;
+                $("#myModal").load(url);
+                $("#myModal").modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                $("#myModal").modal('show');
+            }
+        };
+
+        function operateFormatter(value, row, index) {
+            var texto = [];
+            texto.push('<a href="@Url.Action("DetalhesVideo", "Coordenador")/' + row.id + '" class="informacao" ><i title="Informações" class="fas fa-search fa-lg " data-original-title="Informações"></i></a>');
+            texto.push('<a href="@Url.Action("EditarVideo", "Coordenador")/' + row.id + '"><i title="Editar" class="fas fa-edit fa-lg" data-original-title="Editar"></i></a>');
+            if (row.active == 1) {
+                texto.push('<a href="#" class="excluir" ><i title="Desativar" class="fa fa-eye-slash fa-lg" style="color: red;" data-original-title="Desativar"></i></a>');
+            } else {
+                texto.push('<a href="#" class="reativar" ><i title="Ativar" class="fa fa-eye fa-lg " data-original-title="Ativar"></i></a>');
+            }
+            return texto.join('&nbsp;&nbsp;');
+        }
+
+        $(document).ready(function() {
+            $('input.form-control').focus();
+        });
+
+       $(document).ready(function () {
+
+            $("#Area").select2({
+                placeholder: "Selecionar...",
+                language: {
+                    noResults: function () {
+                        return "Não Encontrado.";
+                    },
+                    searching: function () {
+                        return "Procurando...";
+                    }
+                }
+            });
+
+            $("#SubArea").select2({
+                placeholder: "Selecionar...",
+                language: {
+                    noResults: function () {
+                        return "Não Encontrado.";
+                    },
+                    searching: function () {
+                        return "Procurando...";
+                    }
+                }
+            });
+        });
+
+        $( ".filtro" ).change(function() {
+           /* alert("Handler for .change() called.");*/
+            var area = $('#Area').val();
+            var subArea = $('#SubArea').val();
+            var link = '@Url.Action("ListarVideosAjax", "Professor")/?Area=' + area + '&SubArea=' + subArea;
+            $table.bootstrapTable('refresh', { url: link });
+        });
+
+        function BuscarSubArea() {
+            var areaId = $('#Area').val();
+    $.ajax({
+        dataType: "json",
+        method: "POST",
+        url: "@Url.Action("BuscarSubArea", "Professor")",
+        data: { id: areaId },
+    }).done(function (data) {
+        var select = $("#SubArea");
+        select.empty();
+        select.append($('<option>', { value: '', text: 'Escolha uma Subárea' }));
+
+
+        data.forEach(function (item) {
+            select.append($('<option>', {
+                value: item.Id,
+                text: item.Nome
+            }));
+        });
+
+        select.prop('disabled', false);
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        console.error('Erro na chamada AJAX: ' + textStatus);
+    });
+}
+
+        $('#Area').on("change", function (event) {
+            BuscarSubArea();
+        });
+
+
+    </script>
+}
+
+
+

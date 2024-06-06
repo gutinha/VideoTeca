@@ -35,6 +35,8 @@ namespace VideoTeca.Models
 
         public bool active { get; set; }
 
+        public bool accept_terms { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<video_avaliacoes> video_avaliacoes { get; set; }
 

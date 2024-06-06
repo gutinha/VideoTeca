@@ -24,6 +24,9 @@ namespace VideoTeca.Controllers
         public ActionResult EnviarVideo()
         {
             ViewBag.Areas = db.area.ToList();
+            long userLogado = Convert.ToInt64(Session["id_user"]);
+            var termos = db.usuario.Where(u => u.id == userLogado).Select(x => x.accept_terms).First();
+            ViewBag.Termos = termos;
             return View();
         }
 
@@ -157,6 +160,13 @@ namespace VideoTeca.Controllers
                     var subareaStr = formulario["subarea"];
                     int subarea;
                     long userLogado = Convert.ToInt64(Session["id_user"]);
+
+                    var user = db.usuario.Where(x => x.id == userLogado).First();
+                    if (user.accept_terms == false) { 
+                        user.accept_terms = true;
+                        db.Entry(user).State = EntityState.Modified;
+                    }
+
                     video video = new video
                     {
                         titulo = titulo,
@@ -176,6 +186,7 @@ namespace VideoTeca.Controllers
                     {
                         video.descricao = descricao;
                     }
+                    
                     db.video.Add(video);
                     db.SaveChanges();
                     transaction.Commit();
