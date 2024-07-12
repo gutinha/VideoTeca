@@ -30,14 +30,14 @@ namespace VideoTeca.Models
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<area>()
-                .HasMany(e => e.subarea)
-                .WithMany(e => e.area)
-                .Map(m => m.ToTable("subareas_areas").MapLeftKey("id_area").MapRightKey("id_subarea"));
-
-            modelBuilder.Entity<area>()
                 .HasMany(e => e.usuario)
                 .WithMany(e => e.area)
                 .Map(m => m.ToTable("usuarios_areas").MapLeftKey("id_area").MapRightKey("id_usuario"));
+
+            modelBuilder.Entity<area>()
+                .HasMany(e => e.subarea)
+                .WithMany(e => e.area)
+                .Map(m => m.ToTable("subareas_areas").MapLeftKey("id_area").MapRightKey("id_subarea"));
 
             modelBuilder.Entity<status>()
                 .HasMany(e => e.video)
@@ -67,7 +67,6 @@ namespace VideoTeca.Models
                 .WithRequired(e => e.video)
                 .HasForeignKey(e => e.id_video)
                 .WillCascadeOnDelete(false);
-
         }
     }
 }

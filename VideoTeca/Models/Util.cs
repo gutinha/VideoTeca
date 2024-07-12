@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -49,6 +50,12 @@ namespace VideoTeca.Models
             }
             return sb.ToString();
         }
+        /*
+        public static string DecryptData(string encryptedData, string key)
+        {
+             Removed for legal purposes
+        }
+        */
 
     }
 }

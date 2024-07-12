@@ -42,6 +42,13 @@ namespace VideoTeca.Models
 
         public DateTime enviadoEm { get; set; }
 
+        public bool locked { get; set; }
+
+        [StringLength(255)]
+        public string lockedBy { get; set; }
+
+        public DateTime? lockedExpiresAt { get; set; }
+
         public virtual area area { get; set; }
 
         public virtual status status { get; set; }

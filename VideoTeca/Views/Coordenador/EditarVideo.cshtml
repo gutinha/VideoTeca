@@ -1,0 +1,51 @@
+﻿@using VideoTeca.Models
+@model video
+@{
+    ViewBag.Title = "Editar Video";
+}
+
+    <div class="list-group" style="margin-top: 5px;">
+        <span class="list-group-item active">
+            <h3 class="list-group-item-heading" align="center">Editar Video</h3>
+        </span>
+        <div class="panel panel-primary table-responsive">
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="mb-1">
+            <video id="@Model.id"
+                   class="video-js ratio"
+                   controls
+                   preload="auto"
+                   width="640"
+                   height="440"
+                   poster=""
+                   data-setup='{"techOrder": ["youtube"], "sources": [{ "type": "video/youtube", "src": "@Model.url"}] }'>
+                <p class="vjs-no-js">
+                    To view this video please enable JavaScript, and consider upgrading to a
+                    web browser that
+                    <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                </p>
+            </video>
+        </div>
+        <div class="detalhes">
+            <div class="form-floating mb-1">
+                <input type="text" class="form-control" id="floatingInputTitulo" name="titulo" placeholder="Título ou Palavras-Chave" value="@Model.titulo" required="">
+                <label for="floatingInputTitulo">Título:</label>
+            </div>
+            <div class="form-floating mb-1">
+                <textarea class="form-control" placeholder="Descrição" id="floatingTextareaDescricao"  style="height: 100px">@Model.descricao</textarea>
+                <label for="floatingTextareaDescricao">Descrição</label>
+            </div>
+            <div class="form-floating mb-1">
+                <input type="text" class="form-control" id="floatingInputLink" name="link" placeholder="Link do video" value="@Model.url" required="">
+                <label for="floatingInputLink">Link do video:</label>
+            </div>
+            <div class="mb-1">Área: @Model.area.nome</div>
+            <div class="mb-1">Subárea: @(Model.subarea != null ? Model.subarea.nome : "Nenhuma subárea")</div>
+            <div class="mb-1">Enviado por: @Model.usuario.nome</div>
+        </div>
+        <input type="text" class="form-control" id="id" name="id" hidden="hidden" value="@Model.id">
+        <a id="btn-back" href="@Url.Action("ControleVideos", "Coordenador")" class="btn btn-info" style="float:right">Voltar</a>
+    </div>

@@ -1,5 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using VideoTeca.Models;
 
@@ -11,20 +17,7 @@ namespace VideoTeca.Controllers
 
         public ActionResult Index()
         {
-            return View();
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
+            /* Removed login with api unitins for legal purposes */
             return View();
         }
 
@@ -105,7 +98,7 @@ namespace VideoTeca.Controllers
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    TempData["e"] = "Alguma coisa deu errado! Procure o administrador do sistema: " + ex.ToString();
+                    TempData["e"] = "Alguma coisa deu errado! Procure o administrador do sistema: " + ex.Message;
                     return RedirectToAction("Index", "Home");
                 }
             }

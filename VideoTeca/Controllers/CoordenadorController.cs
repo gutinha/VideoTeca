@@ -32,7 +32,18 @@ namespace VideoTeca.Controllers
             return View();
         }
 
-        
+        public ActionResult DetalhesVideo(int id)
+        {
+            var video = db.video.Find(id);
+            return View(video);
+        }
+
+        public ActionResult EditarVideo(int id)
+        {
+            var video = db.video.Find(id);
+            return View(video);
+        }
+
 
         public ActionResult ControleUsuarios()
         {

@@ -24,13 +24,33 @@ namespace VideoTeca.Controllers
 
         public ActionResult AvaliarVideo(int id)
         {
-            var video = db.video.Find(id);
-            return View(video);
+            try
+            {
+                var video = db.video.Find(id);
+                var userName = Convert.ToString(Session["nome"]);
+                if (video.locked && video.lockedExpiresAt > DateTime.Now && video.lockedBy != userName)
+                {
+                    TempData["e"] = "Este vídeo está sendo editado por outro usuário.";
+                    return RedirectToAction("Index");
+                }
+
+                video.locked = true;
+                video.lockedBy = userName;
+                video.lockedExpiresAt = DateTime.Now.AddMinutes(60);
+                db.SaveChanges();
+                return View(video);
+            }
+            catch (Exception ex)
+            {
+                TempData["e"] = "Ocorreu algum erro, contate o administrador do sistema: " + ex.Message;
+                return RedirectToAction("Index");
+            }
+
         }
         [HttpPost]
         public ActionResult AvaliarVideo(FormCollection formulario)
         {
-            using(var transaction = db.Database.BeginTransaction())
+            using (var transaction = db.Database.BeginTransaction())
             {
                 try
                 {
@@ -39,6 +59,14 @@ namespace VideoTeca.Controllers
                     var justificativa = formulario["justificativa"];
                     var id_video = Convert.ToInt64(formulario["id"]);
                     var video = db.video.Find(id_video);
+
+                    //Validar lock
+                    if (video.lockedBy != user.nome)
+                    {
+                        TempData["e"] = "Você não pode salvar este vídeo, pois ele está sendo editado por outro usuário.";
+                        return RedirectToAction("Index");
+                    }
+
                     if (justificativa != null)
                     {
                         if (!justificativa.IsEmpty() || !justificativa.Equals(""))
@@ -64,7 +92,8 @@ namespace VideoTeca.Controllers
                     db.SaveChanges();
                     transaction.Commit();
 
-                } catch(Exception ex)
+                }
+                catch (Exception ex)
                 {
                     TempData["e"] = "Ocorreu algum erro, contate o administrador do sistema: " + ex.ToString();
                     transaction.Rollback();
@@ -78,11 +107,14 @@ namespace VideoTeca.Controllers
         public ActionResult ListarVideosEnviadosAjax(string search, string sort, string order, int? Area, int? SubArea, int? limit = 10, int? offset = 0)
         {
             long userLogado = Convert.ToInt64(Session["id_user"]);
+            string userName = Convert.ToString(Session["nome"]);
             var user = db.usuario.Where(x => x.id == userLogado).First();
-            IQueryable<video> videos = db.video.Where(v => v.active == true && 
-                                                      v.area.usuario.Any(u=> u.id == user.id) && 
+            IQueryable<video> videos = db.video.Where(v =>
+                                                      v.active == true &&
+                                                      v.area.usuario.Any(u => u.id == user.id) &&
                                                       v.aprovado == false &&
-                                                      (!v.video_avaliacoes.Any() || v.video_avaliacoes.Any(a => a.justificativa == null)));
+                                                    (!v.locked || v.lockedExpiresAt <= DateTime.Now || v.lockedBy == userName) &&
+                                                    (!v.video_avaliacoes.Any() || v.video_avaliacoes.Any(a => a.justificativa == null)));
 
             //Filtro por área
             if (Area != null && Area != 0)
