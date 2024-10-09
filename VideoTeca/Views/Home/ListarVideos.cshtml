@@ -1,7 +1,7 @@
 ﻿@using VideoTeca.Models
 @{
     ViewBag.Title = "Vídeos";
-    List<video> videos = ViewBag.videos;
+    List<VideoTeca.Models.ViewModels.VideoViewModel> videos = ViewBag.videos;
     List<area> areas = ViewBag.Areas;
 }
 
@@ -53,14 +53,14 @@
         <!-- Modelo de Coluna para exibir os vídeos -->
         <!-- ratio ratio-16x9 rounded-3 mb-2 -->
         <div class="col mb-5">
-            <video id="@video.id"
+            <video id="@video.Id"
                    class="video-js ratio-16x9 rounded-3 mb-2"
                    controls
                    preload="auto"
                    width="540"
                    height="240"
                    poster=""
-                   data-setup='{"techOrder": ["youtube"], "sources": [{ "type": "video/youtube", "src": "@video.url"}] }'>
+                   data-setup='{"techOrder": ["youtube"], "sources": [{ "type": "video/youtube", "src": "@video.Url"}] }'>
                 <p class="vjs-no-js">
                     To view this video please enable JavaScript, and consider upgrading to a
                     web browser that
@@ -68,8 +68,8 @@
                 </p>
             </video>
             <div class="detalhes">
-                <div class="fw-bold lh-1 mb-2">@video.titulo</div>
-                <div>Enviado por: @video.usuario.nome</div>
+                <div class="fw-bold lh-1 mb-2">@video.Titulo</div>
+                <div>Enviado por: @video.UsuarioNome</div>
             </div>
         </div>
     }

@@ -30,7 +30,7 @@ namespace VideoTeca.Controllers
                 if (!_userService.ValidateUser(model.Email, model.Password))
                 {
                     TempData["e"] = "Email ou senha incorretos!";
-                    return RedirectToAction("Login");
+                    return RedirectToAction("Login", "Account");
                 }
 
                 var usuario = _userService.GetUserByEmail(model.Email);
@@ -38,7 +38,7 @@ namespace VideoTeca.Controllers
                 Session["nome"] = usuario.nome;
                 Session["role"] = usuario.permission.ToString();
                 TempData["s"] = "Login realizado com sucesso!";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
         }
 

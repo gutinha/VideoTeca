@@ -21,5 +21,6 @@ namespace VideoTeca.Models.ViewModels
         public long? SubareaId { get; set; }
         public long AreaId { get; set; }
         public long StatusId { get; set; }
+        public string UsuarioNome { get; set; }
     }
 }

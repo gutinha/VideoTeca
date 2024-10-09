@@ -66,6 +66,8 @@ namespace VideoTeca.Services
                             AreaNome = video.area.nome,
                             SubareaNome = video.subarea.nome,
                             Aprovado = video.aprovado,
+                            Url = video.url,
+                            UsuarioNome = video.usuario.nome,
                             Active = video.active
                         })
                         .ToList();
