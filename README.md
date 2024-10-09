@@ -28,6 +28,12 @@ Filtros básicos de pesquisa por grupo/nome de usuário no módulo do coordenado
 - **Banco de Dados**: Entity Framework e SQL Server para gerenciamento de dados
 - **Framework de UI**: Razor Pages para conteúdo dinâmico
 
+## TO DO
+- [X] Implementar autenticação de usuários.
+- [X] Adicionar paginação nas listagens de vídeos.
+- [X] Melhorar a responsividade da interface.
+- [ ] Implementar uma página separada para exibição dos videos.
+
 ## Instalação e Configuração
 Para configurar o projeto localmente, siga estes passos:
 1. Clone o repositório:
