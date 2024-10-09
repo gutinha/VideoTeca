@@ -8,7 +8,7 @@
 <hr />
 <div class="list-group" style="margin-top: 5px;">
     <span class="list-group-item active">
-        <h3 class="list-group-item-heading" align="center">Listagem de videos enviados</h3>
+        <h3 class="list-group-item-heading" align="center">Listagem de vídeos enviados</h3>
     </span>
     <div class="panel panel-primary table-responsive">
     </div>
@@ -122,7 +122,7 @@
 
         function operateFormatter(value, row, index) {
             var texto = [];
-            texto.push('<a href="#" class="informacao" ><i title="Informações" class="fas fa-search fa-lg " data-original-title="Informações"></i></a>');
+            //texto.push('<a href="@Url.Action("DetalhesAvaliacao", "Avaliador")/'+ row.id + '" class="informacao" ><i title="Informações" class="fas fa-search fa-lg " data-original-title="Informações"></i></a>');
             texto.push('<a href="@Url.Action("AvaliarVideo", "Avaliador")/' + row.id + '"><i title="Avaliar" class="fas fa-edit fa-lg" data-original-title="Avaliar"></i></a>');
             return texto.join('&nbsp;&nbsp;');
         }
@@ -144,7 +144,7 @@
                     }
                 }
             });
-            
+
             $("#SubArea").select2({
                 placeholder: "Selecionar...",
                 language: {

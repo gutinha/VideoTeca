@@ -1,99 +1,81 @@
-﻿@using VideoTeca.Models
+﻿@using VideoTeca.Models.ViewModels
+@model VideoViewModel
 @{
-    ViewBag.Title = "Enviar video";
-    List<area> areas = ViewBag.Areas;
+    ViewBag.Title = "Enviar vídeo";
+    List<VideoTeca.Models.area> areas = ViewBag.Areas;
     bool termos = ViewBag.Termos;
 }
 
 @using (Html.BeginForm("EnviarVideo", "Professor", FormMethod.Post, new { enctype = "multipart/form-data", id = "enviarVideo", autocomplete = "on" }))
 {
     <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="floatingInputTitulo" name="titulo" placeholder="Título ou Palavras-Chave" required="">
-        <label for="floatingInputTitulo">Título:</label>
+        @Html.LabelFor(m => m.Titulo, "Título:")
+        @Html.TextBoxFor(m => m.Titulo, new { @class = "form-control", placeholder = "Título ou Palavras-Chave", required = "required" })
     </div>
+
     <div class="form-group">
-        <label for="floatingInputDescricao">Descrição:</label>
-        <textarea class="form-control" id="descricao" name="descricao" maxlength="4000"></textarea>
+        @Html.LabelFor(m => m.Descricao, "Descrição:")
+        @Html.TextAreaFor(m => m.Descricao, new { @class = "form-control", maxlength = "4000" })
     </div>
+
     <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="floatingInputLink" name="url" placeholder="Link do video" required="">
-        <label for="floatingInputLink">Link do video:</label>
+        @Html.LabelFor(m => m.Url, "Link do vídeo:")
+        @Html.TextBoxFor(m => m.Url, new { @class = "form-control", placeholder = "Link do vídeo", required = "required" })
     </div>
+
     <div class="row gx-2 mb-5">
         <div class="col-5 col-lg-3">
             <div class="form-floating">
-                <select class="form-select" id="floatingSelect1" name="area" required="">
-                    <option selected hidden>Escolha uma área</option>
-                    @foreach (var area in ViewBag.Areas)
-                    {
-                        <option value="@area.id">@area.nome</option>
-                    }
-                </select>
-                <label for="floatingSelect">Área</label>
+                @Html.LabelFor(m => m.AreaId, "Área")
+                @Html.DropDownListFor(m => m.AreaId, new SelectList(areas, "id", "nome"), "Escolha uma área", new { @class = "form-select", id = "floatingSelect1", required = "required" })
             </div>
         </div>
 
         <div class="col-5 col-lg-3">
             <div class="form-floating">
-                <select class="form-select" id="floatingSelect" name="subarea" disabled="">
-                    <option selected hidden></option>
-                </select>
-                <label for="floatingSelect">Subárea</label>
+                @Html.LabelFor(m => m.SubareaId, "Subárea")
+                @Html.DropDownListFor(m => m.SubareaId, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Escolha uma Subárea", new { @class = "form-select", id = "floatingSelect", disabled = "disabled" })
             </div>
         </div>
     </div>
-        <div class="form-group form-check">
-            <a class="btn btn-primary" style="float: right; color: white; text-decoration: none; @(termos ? "display:none;" : "")" id="aceitarTermos" name="aceitarTermos">Aceitar termos</a>
-        </div>
+
+    <div class="form-group form-check">
+        <a class="btn btn-primary" style="float: right; color: white; text-decoration: none; @(termos ? "display:none;" : "")" id="aceitarTermos" name="aceitarTermos">Aceitar termos</a>
+    </div>
+
     <button type="submit" class="btn btn-primary offset-11" style="float:right" id="enviarBtn" @(termos ? "" : "disabled")>Enviar</button>
 }
 
 @section Scripts {
     <script>
+    function fetchSubAreas() {
+        var areaId = $('#floatingSelect1').val();
+        $.ajax({
+            dataType: "json",
+            method: "POST",
+            url: "@Url.Action("BuscarSubArea", "Professor")",
+            data: { id: areaId },
+        })
+        .done(function(data) {
+            var select = $("#floatingSelect");
+            select.empty().append($('<option>', { value: '', text: 'Escolha uma Subárea' }));
 
-        document.getElementById('aceitarTermos').addEventListener('click', function() {
-            var url = '@Url.Action("AceitarTermosModal", "Professor")';
-            $("#myModal").load(url);
-            $("#myModal").modal({
-                backdrop: 'static',
-                keyboard: false
+            data.forEach(function(item) {
+                select.append($('<option>', {
+                    value: item.Id,
+                    text: item.Nome
+                }));
             });
-            $("#myModal").modal('show');
+
+            select.prop('disabled', false);
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            console.error('Erro na chamada AJAX: ' + textStatus);
         });
+    }
 
-        function fetchSubAreas() {
-            var areaId = $('#floatingSelect1').val();
-            $.ajax({
-                dataType: "json",
-                method: "POST",
-                url: "@Url.Action("BuscarSubArea", "Professor")",
-                data: { id: areaId },
-            })
-            .done(function(data) {
-                var select = $("#floatingSelect");
-                select.empty().append($('<option>', { value: '', text: 'Escolha uma Subárea' }));
-
-                data.forEach(function(item) {
-                    select.append($('<option>', {
-                        value: item.Id,
-                        text: item.Nome
-                    }));
-                });
-
-                select.prop('disabled', false);
-            })
-            .fail(function(jqXHR, textStatus, errorThrown) {
-                console.error('Erro na chamada AJAX: ' + textStatus);
-            });
-        }
-
-        $('#floatingSelect1').on("change", fetchSubAreas);
-
-        $(document).on("change", "#termsCheckbox", function() {
-            var isChecked = $(this).is(':checked');
-            $('#fecharBtn').prop('disabled', !isChecked);
-            $('#enviarBtn').prop('disabled', !isChecked);
-        });
+    $('#floatingSelect1').on("change", fetchSubAreas);
     </script>
+
 }
 

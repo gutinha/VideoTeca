@@ -8,8 +8,8 @@
     <div class="pull-right novo-page-header">
         <a href="@Url.Action("EnviarVideo", "Professor")">
             <button type="button" class="btn btn-primary">
-                <i class="fa fa-plus fa-1x" title="" data-original-title="Enviar video" data-toggle="tooltip" data-placement="top" title="Enviar video"> </i>
-                &nbsp;&nbsp;Novo Video
+                <i class="fa fa-plus fa-1x" title="" data-original-title="Enviar vídeo" data-toggle="tooltip" data-placement="top" title="Enviar vídeo"> </i>
+                &nbsp;&nbsp;Novo Vídeo
             </button>
         </a>
     </div>
@@ -18,7 +18,7 @@
 <hr />
 <div class="list-group" style="margin-top: 5px;">
     <span class="list-group-item active">
-        <h3 class="list-group-item-heading" align="center">Listagem de videos enviados</h3>
+        <h3 class="list-group-item-heading" align="center">Listagem de Vídeos enviados</h3>
     </span>
     <div class="panel panel-primary table-responsive">
     </div>
@@ -93,6 +93,11 @@
                         visible: false
                     },
                     {
+                        title: 'Ativo',
+                        field: 'active',
+                        visible: false
+                    },
+                    {
                         title: 'Título',
                         field: 'titulo',
                         align: 'center',
@@ -123,6 +128,7 @@
                         title: 'Ação',
                         field: 'operate',
                         align: 'center',
+                        events: eventos,
                         formatter: operateFormatter,
                         width: '200px'
                     }
@@ -130,11 +136,38 @@
             });
         });
 
+        window.eventos = {
+
+        'click .excluir': function(e, value, row, index) {
+            var url = '@Url.Action("ExcluirVideoModal", "Professor")/' + row.id;
+            $("#myModal").load(url);
+            $("#myModal").modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+            $("#myModal").modal('show');
+        },
+
+        'click .reativar': function(e, value, row, index) {
+            var url = '@Url.Action("AtivarVideoModal", "Professor")/' + row.id;
+            $("#myModal").load(url);
+            $("#myModal").modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+            $("#myModal").modal('show');
+    }
+};
+
         function operateFormatter(value, row, index) {
             var texto = [];
-            texto.push('<a href="#" class="informacao" ><i title="Informações" class="fas fa-search fa-lg " data-original-title="Informações"></i></a>');
+            texto.push('<a href="@Url.Action("DetalhesVideo", "Professor")/'+ row.id + '" class="informacao" ><i title="Informações" class="fas fa-search fa-lg " data-original-title="Informações"></i></a>');
             texto.push('<a href="@Url.Action("EditarVideo", "Professor")/' + row.id + '"><i title="Editar" class="fas fa-edit fa-lg" data-original-title="Editar"></i></a>');
-            texto.push('<a href="#" class="excluir" ><i title="Excluir" class="fas fa-trash-alt fa-lg " data-original-title="Excluir"></i></a>');
+            if (row.active == 1) {
+                texto.push('<a href="#" class="excluir" ><i title="Desativar" class="fa fa-eye-slash fa-lg" style="color: red;" data-original-title="Desativar"></i></a>');
+            } else {
+                texto.push('<a href="#" class="reativar" ><i title="Ativar" class="fa fa-eye fa-lg " data-original-title="Ativar"></i></a>');
+            }
             return texto.join('&nbsp;&nbsp;');
         }
 
@@ -155,7 +188,7 @@
                     }
                 }
             });
-            
+
             $("#SubArea").select2({
                 placeholder: "Selecionar...",
                 language: {

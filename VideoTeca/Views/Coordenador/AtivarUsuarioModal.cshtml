@@ -4,14 +4,6 @@
     ViewBag.Title = "Ativar Usuário";
     Layout = null;
     List<area> areasUsuario = ViewBag.AreasUsuario;
-    var userTypes = new Dictionary<long, string>
-{
-        { 1, "Usuário" },
-        { 2, "Professor" },
-        { 3, "Avaliador" },
-        { 4, "Dicom" },
-        { 5, "Coordenador" }
-    };
 }
 <style type="text/css">
 
@@ -55,7 +47,7 @@
                                             <label for="TipoUsuario" class="control-label">Tipo de Usuário:</label>
                                             <br />
                                             <select class="form-control" id="TipoUsuario" name="TipoUsuario" tabindex="14" style="color: #0c0c0c;" disabled="" required="">
-                                                <option value="@Model.permission">@userTypes[Model.permission]</option>
+                                                <option value="@Model.permission">@CONSTANTES.userTypes[Model.permission]</option>
                                             </select>
                                         </div>
                                     </div>

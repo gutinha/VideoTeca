@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -50,12 +51,35 @@ namespace VideoTeca.Models
             }
             return sb.ToString();
         }
-        /*
-        public static string DecryptData(string encryptedData, string key)
-        {
-             Removed for legal purposes
-        }
-        */
 
+        public static usuarioDTO Decrypt(string ciphertext)
+        {
+            using (Aes aesAlg = Aes.Create())
+            {
+                byte[] ciphertextByte = Convert.FromBase64String(ciphertext);
+                byte[] iv = new byte[16];
+                byte[] key = new byte[32]; // 256-bit key
+                // Key removed for legal reasons. Authentication only works in UNITINS with correct key
+                aesAlg.Key = key;
+                aesAlg.IV = iv;
+
+                ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+                byte[] decryptedBytes;
+
+                using (var msDecrypt = new System.IO.MemoryStream(ciphertextByte))
+                {
+                    using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                    {
+                        using (var msPlain = new System.IO.MemoryStream())
+                        {
+                            csDecrypt.CopyTo(msPlain);
+                            decryptedBytes = msPlain.ToArray();
+                        }
+                    }
+                }
+                
+                return JsonConvert.DeserializeObject<usuarioDTO>(Encoding.UTF8.GetString(decryptedBytes));
+            }
+        }
     }
 }

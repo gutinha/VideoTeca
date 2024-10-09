@@ -1,13 +1,13 @@
 ﻿@using VideoTeca.Models
 @model video
 @{
-    ViewBag.Title = "Avaliar Video";
+    ViewBag.Title = "Avaliar Vídeo";
 }
 @using (Html.BeginForm("AvaliarVideo", "Avaliador", FormMethod.Post, new { enctype = "multipart/form-data", id = "avaliarVideo", autocomplete = "on" }))
 {
     <div class="list-group" style="margin-top: 5px;">
         <span class="list-group-item active">
-            <h3 class="list-group-item-heading" align="center">Avaliar Video</h3>
+            <h3 class="list-group-item-heading" align="center">Avaliar Vídeo</h3>
         </span>
         <div class="panel panel-primary table-responsive">
         </div>
@@ -39,7 +39,7 @@
                 <textarea class="form-control overflow-auto" style="min-height:100px;" id="descricao" name="descricao" maxlength="4000" disabled>@Model.descricao</textarea>
             </div>
             <div class="mb-1">
-                <label for="floatingInputLink">Link do video: @Model.url</label>
+                <label for="floatingInputLink">Link do vídeo: @Model.url</label>
             </div>
             <div>Área: @Model.area.nome</div>
             <div>Subárea: @(Model.subarea != null ? Model.subarea.nome : "Nenhuma subárea")</div>
@@ -54,7 +54,7 @@
             <textarea class="form-control overflow-auto" id="justificativa" name="justificativa" maxlength="4000" required></textarea>
         </div>
         <div class="form-group form-check">
-            <button class="btn btn-primary" type="submit" style="float: right; color: white; text-decoration: none;" id="avaliar" disabled>Avaliar</button>
+            <button class="btn btn-primary" type="submit" style="float: right; color: white; text-decoration: none;" id="avaliar" disabled>Salvar</button>
         </div>
         <input type="text" class="form-control" id="id" name="id" hidden="hidden" value="@Model.id">
     </div>

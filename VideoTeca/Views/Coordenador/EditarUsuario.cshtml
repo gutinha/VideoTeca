@@ -5,16 +5,6 @@
     List<area> areasUsuario = ViewBag.AreasUsuario;
     long permissao = ViewBag.Permissao;
     List<area> areas = ViewBag.Areas;
-
-    var userTypes = new Dictionary<long, string>
-{
-        { 1, "Usuário" },
-        { 2, "Professor" },
-        { 3, "Avaliador" },
-        { 4, "Dicom" },
-        { 5, "Coordenador" }
-    };
-
 }
 
 <style type="text/css">
@@ -59,7 +49,7 @@
                                         <label for="TipoUsuario" class="control-label">Tipo de Usuário*:</label>
                                         <br />
                                         <select class="form-control" id="TipoUsuario" name="TipoUsuario" tabindex="14" style="color: #0c0c0c;" required="">
-                                            @foreach (var userType in userTypes)
+                                            @foreach (var userType in CONSTANTES.userTypes)
                                             {
                                                 <option value="@userType.Key" @(userType.Key == permissao ? "selected" : "")>@userType.Value</option>
                                             }

@@ -1,6 +1,6 @@
 ﻿@using VideoTeca.Models
 @{
-    ViewBag.Title = "Videos";
+    ViewBag.Title = "Vídeos";
     List<video> videos = ViewBag.videos;
     List<area> areas = ViewBag.Areas;
 }
@@ -9,14 +9,14 @@
     <div class="row gx-2 mb-5">
         <div class="col-12 col-lg-5">
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="floatingInputTitulo" placeholder="Título ou Palavras-Chave">
+                <input type="text" class="form-control" id="idTituloInput" placeholder="Título ou Palavras-Chave">
                 <label for="floatingInputTitulo">Pesquisar por Título ou Palavras-Chave</label>
             </div>
         </div>
 
         <div class="col-5 col-lg-3">
             <div class="form-floating">
-                <select class="form-select" id="floatingSelect1" aria-label="Floating label select example">
+                <select class="form-select" id="idAreaSelect" aria-label="Floating label select example">
                     <option selected hidden></option>
                     @foreach (var area in ViewBag.Areas)
                     {
@@ -29,7 +29,7 @@
 
         <div class="col-5 col-lg-3">
             <div class="form-floating">
-                <select class="form-select" id="floatingSelect" aria-label="Floating label select example" disabled="">
+                <select class="form-select" id="idSubareaSelect" aria-label="Floating label select example" disabled="">
                     <option selected hidden></option>
                 </select>
                 <label for="floatingSelect">Subárea</label>
@@ -38,7 +38,7 @@
 
         <div class="col-2 col-lg-1">
             <div class="d-grid gap-0">
-                <button type="submit" class="btn btn-primary" style="height: 58px;">
+                <button type="button" class="btn btn-primary" id="buscar" style="height: 58px;" onclick="buscarVideos()">
                     <i class="fas fa-search"></i>
                 </button>
             </div>
@@ -46,17 +46,18 @@
     </div>
 </form>
 
-<div class="row row-cols-2 row-cols-lg-4">
+<div class="row row-cols-1 row-cols-md-5">
 
     @foreach (var video in videos)
     {
         <!-- Modelo de Coluna para exibir os vídeos -->
+        <!-- ratio ratio-16x9 rounded-3 mb-2 -->
         <div class="col mb-5">
             <video id="@video.id"
-                   class="video-js ratio ratio-16x9 rounded-3 mb-2"
+                   class="video-js ratio-16x9 rounded-3 mb-2"
                    controls
                    preload="auto"
-                   width="640"
+                   width="540"
                    height="240"
                    poster=""
                    data-setup='{"techOrder": ["youtube"], "sources": [{ "type": "video/youtube", "src": "@video.url"}] }'>
@@ -73,19 +74,49 @@
         </div>
     }
 </div>
+<div class="pagination">
+    @if (ViewBag.TotalPages > 1)
+    {
+        <nav aria-label="Navegação de página">
+            <ul class="pagination justify-content-center">
+                @if (ViewBag.CurrentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);" onclick="buscarVideos(@(ViewBag.CurrentPage - 1))">Anterior</a>
+                    </li>
+                }
+
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                        <a class="page-link" href="javascript:void(0);" onclick="buscarVideos(@i)">@i</a>
+                    </li>
+                }
+
+                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);" onclick="buscarVideos(@(ViewBag.CurrentPage + 1))">Próximo</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div>
+
 
 @section Scripts {
     <script>
         window.HELP_IMPROVE_VIDEOJS = false;
         function BuscarSubArea() {
-    var areaId = $('#floatingSelect1').val();
+    var areaId = $('#idAreaSelect').val();
     $.ajax({
         dataType: "json",
         method: "POST",
         url: "@Url.Action("BuscarSubArea", "Home")",
         data: { id: areaId },
     }).done(function (data) {
-        var select = $("#floatingSelect");
+        var select = $("#idSubareaSelect");
         select.empty();
         select.append($('<option>', { value: '', text: 'Escolha uma Subárea' }));
 
@@ -104,9 +135,20 @@
 }
 
 
-        $('#floatingSelect1').on("change", function (event) {
+        $('#idAreaSelect').on("change", function (event) {
             BuscarSubArea();
         });
+
+        function buscarVideos(page = 1) {
+            const area = document.getElementById('idAreaSelect').value;
+            const subarea = document.getElementById('idSubareaSelect').value;
+            const titulo = document.getElementById('idTituloInput').value;
+    
+            const url = `/Home/ListarVideos?area=${encodeURIComponent(area)}&subarea=${encodeURIComponent(subarea)}&titulo=${encodeURIComponent(titulo)}&page=${page}`;
+            window.location.href = url;
+        }
+
+
     </script>
 }
 

@@ -8,24 +8,57 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using VideoTeca.Models;
+using VideoTeca.Models.ViewModels;
+using VideoTeca.Services;
 
 namespace VideoTeca.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly dbContext db = new dbContext();
+        private readonly IUserService _userService;
+        private readonly IVideoService _videoService;
+
+        public HomeController(IUserService userService, IVideoService videoService)
+        {
+            _userService = userService;
+            _videoService = videoService;
+        }
 
         public ActionResult Index()
         {
-            /* Removed login with api unitins for legal purposes */
+            string queryString = Request.QueryString["dados"];
+            if (!string.IsNullOrEmpty(queryString))
+            {
+                try
+                {
+                    usuarioDTO dadosOriginais = _userService.DecryptUser(queryString);
+                    var userDb = _userService.GetUserByEmail(dadosOriginais.Email);
+                    if (userDb != null)
+                    {
+                        //Authentication here
+                    }
+                }
+                catch (Exception ex)
+                {
+                    TempData["e"] = "Erro ao decodificar a string base64: " + ex.Message;
+                }
+            }
+
             return View();
         }
 
-        public ActionResult ListarVideos()
+        public ActionResult ListarVideos(string area = null, string subarea = null, string titulo = null, int page = 1, int pageSize = 10)
         {
-            ViewBag.Areas = db.area.ToList();
-            ViewBag.videos = db.video.Where(x => x.active == true && x.aprovado == true).OrderByDescending(x => x.enviadoEm).Take(10).ToList();
-           return View();
+            ViewBag.Areas = _videoService.GetAllAreas();
+
+            int totalVideos;
+            var videos = _videoService.GetVideos(area, subarea, titulo, page, pageSize, out totalVideos);
+
+            ViewBag.videos = videos;
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)totalVideos / pageSize);
+
+            return View();
         }
 
         public ActionResult CriarConta()
@@ -33,90 +66,43 @@ namespace VideoTeca.Controllers
             return View();
         }
 
-        public ActionResult Login()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult Login(FormCollection formulario)
-        {
-            var login = formulario["login"];
-            var password = formulario["password"];
-            password = Util.hash(password);
-            var usuario = db.usuario.Where(u => u.email.Equals(login) && u.password.Equals(password)).FirstOrDefault();
-
-            if (usuario == null)
-            {
-                TempData["e"] = "Email ou senha incorretos!";
-                return RedirectToAction("Login", "Home");
-            }
-
-            Session["id_user"] = usuario.id.ToString();
-            Session["nome"] = usuario.nome;
-            Session["role"] = usuario.permission.ToString();
-            TempData["s"] = "Login realizado com sucesso!";
-            return RedirectToAction("Index", "Home");
-
-        }
-
         [HttpPost]
         public ActionResult CriarConta(FormCollection formulario)
         {
-            using (var transaction = db.Database.BeginTransaction())
+            var email = formulario["login"];
+            var name = formulario["nome"];
+            var password = formulario["password"];
+
+            if (_userService.IsUserExists(email))
             {
-                try
-                {
-                    var login = formulario["login"];
-                    var usuario = db.usuario.Where(u => u.email.Equals(login)).FirstOrDefault();
-
-                    if (usuario != null)
-                    {
-                        TempData["e"] = "Não foi possível cadastrar, Já existe um usuário com esse email";
-                        return RedirectToAction("Index", "Home");
-                    }
-
-                    usuario user = new usuario
-                    {
-                        nome = formulario["nome"],
-                        email = formulario["login"],
-                        password = Util.hash(formulario["password"]),
-                        permission = 1,
-                        active = true
-                    };
-
-                    db.usuario.Add(user);
-                    db.SaveChanges();
-                    transaction.Commit();
-
-                    Session["id_user"] = user.id.ToString();
-                    Session["nome"] = user.nome;
-                    Session["role"] = user.permission.ToString();
-                    TempData["s"] = "Conta criada com sucesso!";
-                    return RedirectToAction("Index", "Home");
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();
-                    TempData["e"] = "Alguma coisa deu errado! Procure o administrador do sistema: " + ex.Message;
-                    return RedirectToAction("Index", "Home");
-                }
+                TempData["e"] = "Não foi possível cadastrar, Já existe um usuário com esse email";
+                return RedirectToAction("Index", "Home");
             }
-            
+
+            try
+            {
+                _userService.CreateUser(name, email, password);
+
+                var usuario = _userService.GetUserByEmail(email);
+                Session["id_user"] = usuario.id.ToString();
+                Session["nome"] = usuario.nome;
+                Session["role"] = usuario.permission.ToString();
+                TempData["s"] = "Conta criada com sucesso!";
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception ex)
+            {
+                TempData["e"] = "Alguma coisa deu errado! Procure o administrador do sistema: " + ex.Message;
+                return RedirectToAction("Index", "Home");
+            }
+
         }
 
         public ActionResult BuscarSubArea(int id)
         {
-            //var subAreas = db.subarea.Where(x => x.id_area == id).ToList().Select(a => new { Id = a.id, Nome = a.nome });
-            var subAreas = db.area
-            .Where(a => a.id == id)
-            .SelectMany(a => a.subarea)
-            .Select(sa => new
-            {
-                Id = sa.id,
-                Nome = sa.nome
-            })
-            .ToList();
+            var subAreas = _videoService.GetSubAreasByAreaId(id)
+                                    .Select(sa => new { Id = sa.id, Nome = sa.nome })
+                                    .ToList();
             return Json(subAreas, JsonRequestBehavior.AllowGet);
         }
 

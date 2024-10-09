@@ -8,26 +8,54 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using VideoTeca.Models;
+using VideoTeca.Models.ViewModels;
+using VideoTeca.Services;
 
 namespace VideoTeca.Controllers
 {
     public class ProfessorController : Controller
     {
         private readonly dbContext db = new dbContext();
+        private readonly IVideoService _videoService;
+        private readonly IUserService _userService;
+
+        public ProfessorController(IVideoService videoService, IUserService userService)
+        {
+            _videoService = videoService;
+            _userService = userService;
+        }
 
         public ActionResult Index()
         {
-            ViewBag.Areas = db.area.ToList();
+            ViewBag.Areas = _videoService.GetAllAreas();
             return View();
         }
 
         public ActionResult EnviarVideo()
         {
-            ViewBag.Areas = db.area.ToList();
+            ViewBag.Areas = _videoService.GetAllAreas();
             long userLogado = Convert.ToInt64(Session["id_user"]);
-            var termos = db.usuario.Where(u => u.id == userLogado).Select(x => x.accept_terms).First();
+            bool termos = _userService.GetUserTerms(userLogado);
             ViewBag.Termos = termos;
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult EnviarVideo(VideoViewModel videoViewModel)
+        {
+            try
+            {
+                long userId = Convert.ToInt64(Session["id_user"]);
+                _videoService.CreateVideo(videoViewModel, userId);
+                TempData["s"] = "Vídeo enviado com sucesso! Aguarde um avaliador aprovar seu vídeo.";
+            }
+            catch (Exception ex)
+            {
+                TempData["e"] = "Alguma coisa deu errado! Procure o administrador do sistema: " + ex.Message;
+                return RedirectToAction("Index", "Professor");
+            }
+
+            return RedirectToAction("Index", "Professor");
         }
 
         public ActionResult BuscarSubArea(int id)
@@ -48,7 +76,7 @@ namespace VideoTeca.Controllers
         public ActionResult ListarVideosEnviadosAjax(string search, string sort, string order, int? Area, int? SubArea, int? limit = 10, int? offset = 0)
         {
             long userLogado = Convert.ToInt64(Session["id_user"]);
-            IQueryable<video> videos = db.video.Where(v => v.active == true && v.enviadoPor == userLogado);
+            IQueryable<video> videos = db.video.Where(v => v.enviadoPor == userLogado);
 
             //Filtro por área
             if (Area != null && Area != 0)
@@ -138,6 +166,7 @@ namespace VideoTeca.Controllers
                                     .Select(x => new
                                     {
                                         id = x.id,
+                                        x.active,
                                         x.titulo,
                                         id_status = x.status.nome,
                                         id_area = x.area.nome,
@@ -146,65 +175,107 @@ namespace VideoTeca.Controllers
 
             return Json(new { total = totalItens, rows = resultados }, JsonRequestBehavior.AllowGet);
         }
-        [HttpPost]
-        public ActionResult EnviarVideo(FormCollection formulario)
-        {
-            using(var transaction = db.Database.BeginTransaction())
-            {
-                try
-                {
-                    var titulo = formulario["titulo"];
-                    var descricao = formulario["descricao"];
-                    var url = formulario["url"];
-                    var area = Convert.ToInt64(formulario["area"]);
-                    var subareaStr = formulario["subarea"];
-                    int subarea;
-                    long userLogado = Convert.ToInt64(Session["id_user"]);
-
-                    var user = db.usuario.Where(x => x.id == userLogado).First();
-                    if (user.accept_terms == false) { 
-                        user.accept_terms = true;
-                        db.Entry(user).State = EntityState.Modified;
-                    }
-
-                    video video = new video
-                    {
-                        titulo = titulo,
-                        url = url,
-                        id_area = area,
-                        enviadoPor = userLogado,
-                        active = true,
-                        id_status = 0,
-                        aprovado = false,
-                        enviadoEm = DateTime.Now
-                    };
-                    if (!string.IsNullOrEmpty(subareaStr) && int.TryParse(subareaStr, out subarea))
-                    {
-                        video.id_subarea = subarea;
-                    }
-                    if (!string.IsNullOrEmpty(descricao))
-                    {
-                        video.descricao = descricao;
-                    }
-                    
-                    db.video.Add(video);
-                    db.SaveChanges();
-                    transaction.Commit();
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();
-                    TempData["e"] = "Alguma coisa deu errado! Procure o administrador do sistema: " + ex.ToString();
-                    return RedirectToAction("Index", "Professor");
-                }
-            }
-            TempData["s"] = "Video enviado com sucesso! Aguarde um avaliador aprovar seu video.";
-            return RedirectToAction("Index", "Professor");
-        }
+        
 
         public ActionResult AceitarTermosModal()
         {
             return View();
+        }
+        [HttpPost]
+        public ActionResult EditarVideo(VideoViewModel videoViewModel)
+        {
+            try
+            {
+                _videoService.EditVideo(videoViewModel);
+                TempData["s"] = "Vídeo editado com sucesso!";
+            }
+            catch (Exception ex)
+            {
+                TempData["e"] = "Alguma coisa deu errado! Procure o administrador do sistema: " + ex.Message;
+                return RedirectToAction("Index", "Professor");
+            }
+
+            return RedirectToAction("Index", "Professor");
+        }
+
+        public ActionResult ExcluirVideoModal(int id)
+        {
+            var video = db.video.Find(id);
+            return View(video);
+        }
+
+        [HttpPost]
+        public ActionResult ExcluirVideo(int id)
+        {
+            try
+            {
+                _videoService.DeleteVideo(id);
+                TempData["s"] = "Excluído com sucesso!";
+            }
+            catch (Exception ex)
+            {
+                TempData["e"] = "Ocorreu algum erro, contate o administrador do sistema: " + ex.Message;
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult EditarVideo(int id)
+        {
+            try
+            {
+                var video = db.video.Find(id);
+                if (video != null)
+                {
+                    return View(video);
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["e"] = "Alguma coisa deu errado! Procure o administrador do sistema: " + ex.ToString();
+            }
+            TempData["e"] = "Video não encontrado.";
+            return RedirectToAction("Index", "Professor");
+        }
+        public ActionResult DetalhesVideo(int id)
+        {
+            var video = db.video.Find(id);
+            return View(video);
+        }
+
+        public ActionResult AtivarVideoModal(int id)
+        {
+            try
+            {
+                var video = db.video.Find(id);
+                return View(video);
+            }
+            catch (Exception ex)
+            {
+                TempData["e"] = "Alguma coisa deu errado! Procure o administrador do sistema: " + ex.ToString();
+            }
+            TempData["e"] = "Alguma coisa deu errado! Procure o administrador do sistema.";
+            return RedirectToAction("Index");
+        }
+
+
+        [HttpPost]
+        [ActionName("AtivarVideoModal")]
+        public ActionResult AtivarVideoModalPost(int id)
+        {
+            try
+            {
+                _videoService.ActivateVideo(id);
+                TempData["s"] = "Vídeo ativado com sucesso!";
+            }
+            catch (Exception ex)
+            {
+                TempData["e"] = "Alguma coisa deu errado! Procure o administrador do sistema: " + ex.Message;
+                return RedirectToAction("Index", "Professor");
+            }
+
+            return RedirectToAction("Index", "Professor");
         }
 
     }

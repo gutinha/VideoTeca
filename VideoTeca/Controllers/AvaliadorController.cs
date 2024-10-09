@@ -9,98 +9,64 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.WebPages;
 using VideoTeca.Models;
+using VideoTeca.Services;
 
 namespace VideoTeca.Controllers
 {
     public class AvaliadorController : Controller
     {
-        private readonly dbContext db = new dbContext();
-        // GET: Avaliador
+        private readonly IVideoService _videoService;
+        private readonly IAvaliacaoService _avaliacaoService;
+
+        public AvaliadorController(IVideoService videoService, IAvaliacaoService avaliacaoService)
+        {
+            _videoService = videoService;
+            _avaliacaoService = avaliacaoService;
+        }
+
         public ActionResult Index()
         {
-            ViewBag.Areas = db.area.ToList();
+            ViewBag.Areas = _videoService.GetAllAreas();
             return View();
+        }
+
+        public ActionResult DetalhesAvaliacao(int id)
+        {
+            var video = _videoService.GetVideoById(id);
+            return View(video);
         }
 
         public ActionResult AvaliarVideo(int id)
         {
-            try
+            var userName = Convert.ToString(Session["nome"]);
+            if (_avaliacaoService.IsVideoLockedByAnotherUser(id, userName))
             {
-                var video = db.video.Find(id);
-                var userName = Convert.ToString(Session["nome"]);
-                if (video.locked && video.lockedExpiresAt > DateTime.Now && video.lockedBy != userName)
-                {
-                    TempData["e"] = "Este vídeo está sendo editado por outro usuário.";
-                    return RedirectToAction("Index");
-                }
-
-                video.locked = true;
-                video.lockedBy = userName;
-                video.lockedExpiresAt = DateTime.Now.AddMinutes(60);
-                db.SaveChanges();
-                return View(video);
-            }
-            catch (Exception ex)
-            {
-                TempData["e"] = "Ocorreu algum erro, contate o administrador do sistema: " + ex.Message;
+                TempData["e"] = "Este vídeo está sendo editado por outro usuário.";
                 return RedirectToAction("Index");
             }
+
+            _avaliacaoService.LockVideo(id, userName);
+            var video = _videoService.GetVideoById(id);
+            return View(video);
 
         }
         [HttpPost]
         public ActionResult AvaliarVideo(FormCollection formulario)
         {
-            using (var transaction = db.Database.BeginTransaction())
+            try
             {
-                try
-                {
-                    long userLogado = Convert.ToInt64(Session["id_user"]);
-                    var user = db.usuario.Where(x => x.id == userLogado).FirstOrDefault();
-                    var justificativa = formulario["justificativa"];
-                    var id_video = Convert.ToInt64(formulario["id"]);
-                    var video = db.video.Find(id_video);
+                long userId = Convert.ToInt64(Session["id_user"]);
+                var justificativa = formulario["justificativa"];
+                var videoId = Convert.ToInt64(formulario["id"]);
 
-                    //Validar lock
-                    if (video.lockedBy != user.nome)
-                    {
-                        TempData["e"] = "Você não pode salvar este vídeo, pois ele está sendo editado por outro usuário.";
-                        return RedirectToAction("Index");
-                    }
-
-                    if (justificativa != null)
-                    {
-                        if (!justificativa.IsEmpty() || !justificativa.Equals(""))
-                        {
-                            var novaAvaliacao = new video_avaliacoes
-                            {
-                                id_avaliador = user.id,
-                                id_video = id_video,
-                                justificativa = justificativa,
-                                data_avaliacao = DateTime.Now
-                            };
-                            db.video_avaliacoes.Add(novaAvaliacao);
-                            video.id_status = 1;
-                        }
-                    }
-                    else
-                    {
-                        video.aprovado = true;
-                        video.id_status = 2;
-                    }
-
-                    db.Entry(video).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                    transaction.Commit();
-
-                }
-                catch (Exception ex)
-                {
-                    TempData["e"] = "Ocorreu algum erro, contate o administrador do sistema: " + ex.ToString();
-                    transaction.Rollback();
-                    return RedirectToAction("Index");
-                }
+                _avaliacaoService.SaveAvaliacao(userId, videoId, justificativa);
+                TempData["s"] = "Vídeo avaliado com sucesso!";
             }
-            TempData["s"] = "Video avaliado com sucesso!";
+            catch (Exception ex)
+            {
+                TempData["e"] = "Ocorreu algum erro, contate o administrador do sistema: " + ex.Message;
+            }
+
             return RedirectToAction("Index");
         }
 
@@ -108,110 +74,22 @@ namespace VideoTeca.Controllers
         {
             long userLogado = Convert.ToInt64(Session["id_user"]);
             string userName = Convert.ToString(Session["nome"]);
-            var user = db.usuario.Where(x => x.id == userLogado).First();
-            IQueryable<video> videos = db.video.Where(v =>
-                                                      v.active == true &&
-                                                      v.area.usuario.Any(u => u.id == user.id) &&
-                                                      v.aprovado == false &&
-                                                    (!v.locked || v.lockedExpiresAt <= DateTime.Now || v.lockedBy == userName) &&
-                                                    (!v.video_avaliacoes.Any() || v.video_avaliacoes.Any(a => a.justificativa == null)));
+            int pageSize = limit ?? 10;
+            int page = offset ?? 0;
+            int totalItems;
 
-            //Filtro por área
-            if (Area != null && Area != 0)
+            var videos = _avaliacaoService.GetVideosToReview(userLogado, userName, Area, SubArea, search, sort, order, page, pageSize, out totalItems);
+
+            var resultados = videos.Select(x => new
             {
-                videos = videos.Where(v => v.id_area == Area);
-            }
+                id = x.Id,
+                titulo = x.Titulo,
+                id_status = x.AreaNome,
+                id_area = x.AreaNome,
+                id_subarea = x.SubareaNome
+            }).ToList();
 
-            //Filtro por subÁrea
-            if (SubArea != null && SubArea != 0)
-            {
-                videos = videos.Where(v => v.id_subarea == SubArea);
-            }
-
-            int quantidade = limit ?? 10;
-            int pagina = offset ?? 0;
-
-            switch (sort)
-            {
-                case "titulo":
-                    if (order.Equals("asc"))
-                    {
-                        videos = videos.OrderBy(x => x.titulo);
-                    }
-                    else
-                    {
-                        videos = videos.OrderByDescending(x => x.titulo);
-                    }
-                    break;
-
-                case "id_status":
-                    if (order.Equals("asc"))
-                    {
-                        videos = videos.OrderBy(x => x.status.nome);
-                    }
-                    else
-                    {
-                        videos = videos.OrderByDescending(x => x.status.nome);
-                    }
-                    break;
-
-                case "id_area":
-                    if (order.Equals("asc"))
-                    {
-                        videos = videos.OrderBy(x => x.area.nome);
-                    }
-                    else
-                    {
-                        videos = videos.OrderByDescending(x => x.area.nome);
-                    }
-                    break;
-
-                case "id_subarea":
-                    if (order.Equals("asc"))
-                    {
-                        videos = videos.OrderBy(x => x.subarea.nome);
-                    }
-                    else
-                    {
-                        videos = videos.OrderByDescending(x => x.subarea.nome);
-                    }
-                    break;
-
-                default:
-                    videos = videos.OrderBy(x => x.titulo);
-                    break;
-            }
-
-            if (!string.IsNullOrEmpty(search))
-            {
-                try
-                {
-                    videos = videos.Where(v => v.titulo.ToLower().Contains(search.ToLower()) ||
-                                              v.status.nome.Contains(search.ToLower()) ||
-                                              v.area.nome.Contains(search.ToLower()) ||
-                                              v.subarea.nome.Contains(search.ToLower()));
-                }
-                catch (Exception)
-                {
-                    videos = videos.Where(v => v.titulo.ToLower().Contains(search.ToLower()));
-                }
-            }
-
-            int totalItens = videos.Count();
-
-            var resultados = videos.Skip(pagina)
-                                    .Take(quantidade)
-                                    .ToList()
-                                    .Select(x => new
-                                    {
-                                        id = x.id,
-                                        x.titulo,
-                                        id_status = x.status.nome,
-                                        id_area = x.area.nome,
-                                        id_subarea = x.subarea != null ? x.subarea.nome : "Nenhum"
-                                    }).ToList();
-
-            return Json(new { total = totalItens, rows = resultados }, JsonRequestBehavior.AllowGet);
+            return Json(new { total = totalItems, rows = resultados }, JsonRequestBehavior.AllowGet);
         }
     }
 

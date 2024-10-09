@@ -1,12 +1,13 @@
-﻿@using VideoTeca.Models
-@model video
+﻿@using VideoTeca.Models.ViewModels
+@model VideoViewModel
 @{
-    ViewBag.Title = "Editar Video";
+    ViewBag.Title = "Editar Vídeo";
 }
-
+@using (Html.BeginForm("EditarVideo", "Coordenador", FormMethod.Post, new { enctype = "multipart/form-data", id = "editarVideo", autocomplete = "on" }))
+{
     <div class="list-group" style="margin-top: 5px;">
         <span class="list-group-item active">
-            <h3 class="list-group-item-heading" align="center">Editar Video</h3>
+            <h3 class="list-group-item-heading" align="center">Editar Vídeo</h3>
         </span>
         <div class="panel panel-primary table-responsive">
         </div>
@@ -14,14 +15,14 @@
     <br />
     <div class="row">
         <div class="mb-1">
-            <video id="@Model.id"
+            <video id="@Model.Id"
                    class="video-js ratio"
                    controls
                    preload="auto"
                    width="640"
                    height="440"
                    poster=""
-                   data-setup='{"techOrder": ["youtube"], "sources": [{ "type": "video/youtube", "src": "@Model.url"}] }'>
+                   data-setup='{"techOrder": ["youtube"], "sources": [{ "type": "video/youtube", "src": "@Model.Url"}] }'>
                 <p class="vjs-no-js">
                     To view this video please enable JavaScript, and consider upgrading to a
                     web browser that
@@ -30,22 +31,25 @@
             </video>
         </div>
         <div class="detalhes">
-            <div class="form-floating mb-1">
-                <input type="text" class="form-control" id="floatingInputTitulo" name="titulo" placeholder="Título ou Palavras-Chave" value="@Model.titulo" required="">
-                <label for="floatingInputTitulo">Título:</label>
+            <div class="form-floating mb-3">
+                @Html.LabelFor(m => m.Titulo, "Título:")
+                @Html.TextBoxFor(m => m.Titulo, new { @class = "form-control", placeholder = "Título ou Palavras-Chave", required = "required" })
             </div>
-            <div class="form-floating mb-1">
-                <textarea class="form-control" placeholder="Descrição" id="floatingTextareaDescricao"  style="height: 100px">@Model.descricao</textarea>
-                <label for="floatingTextareaDescricao">Descrição</label>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Descricao, "Descrição:")
+                @Html.TextAreaFor(m => m.Descricao, new { @class = "form-control", maxlength = "4000" })
             </div>
-            <div class="form-floating mb-1">
-                <input type="text" class="form-control" id="floatingInputLink" name="link" placeholder="Link do video" value="@Model.url" required="">
-                <label for="floatingInputLink">Link do video:</label>
+            <div class="form-floating mb-3">
+                @Html.LabelFor(m => m.Url, "Link do vídeo:")
+                @Html.TextBoxFor(m => m.Url, new { @class = "form-control", placeholder = "Link do vídeo", required = "required" })
             </div>
-            <div class="mb-1">Área: @Model.area.nome</div>
-            <div class="mb-1">Subárea: @(Model.subarea != null ? Model.subarea.nome : "Nenhuma subárea")</div>
-            <div class="mb-1">Enviado por: @Model.usuario.nome</div>
+            <div>Área: @Model.AreaNome</div>
+            <div>Subárea: @(Model.SubareaNome ?? "Nenhuma subárea")</div>
         </div>
-        <input type="text" class="form-control" id="id" name="id" hidden="hidden" value="@Model.id">
-        <a id="btn-back" href="@Url.Action("ControleVideos", "Coordenador")" class="btn btn-info" style="float:right">Voltar</a>
+        <div class="form-group form-check">
+            <button class="btn btn-primary" type="submit" style="float: right; color: white; text-decoration: none;" id="salvar">Salvar</button>
+        </div>
+        @Html.HiddenFor(m => m.Id)
     </div>
+}
+

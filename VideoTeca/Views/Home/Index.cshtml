@@ -15,28 +15,28 @@
     <div class="row row-cols-1 row-cols-md-3">
         <div class="col mt-5">
             <div class="card border-0 shadow h-100">
-                <div class="card-header text-white bg-primary">Listagem de videos</div>
+                <div class="card-header text-white bg-primary">Listagem de vídeos</div>
                 <div class="card-body ">
                     <p class="card-text" style="text-align: justify;">
-                        Módulo destinado a listagem de videos.
+                        Módulo destinado a listagem de vídeos.
                     </p>
                 </div>
                 <div class="card-footer">
-                    <a href="@Url.Action("ListarVideos", "Home")" class="stretched-link text-decoration-none"><i class="fas fa-award fa-fw"></i> <strong>Acesso aos videos</strong></a>
+                    <a href="@Url.Action("ListarVideos", "Home")" class="stretched-link text-decoration-none"><i class="fas fa-award fa-fw"></i> <strong>Acesso aos vídeos</strong></a>
                 </div>
             </div>
         </div>
         @if(perm == 3 || perm == 5) { 
         <div class="col mt-5">
             <div class="card border-0 shadow h-100">
-                <div class="card-header text-white bg-primary">Avalie os videos</div>
+                <div class="card-header text-white bg-primary">Avalie os vídeos</div>
                 <div class="card-body ">
                     <p class="card-text" style="text-align: justify;">
-                        Módulo destinado ao professor avaliador, onde ele irá avaliar os videos.
+                        Módulo destinado ao professor avaliador, onde ele irá avaliar os vídeos.
                     </p>
                 </div>
                 <div class="card-footer">
-                    <a href="@Url.Action("Index", "Avaliador")" class="stretched-link text-decoration-none"><i class="fas fa-award fa-fw"></i> <strong>Acesso aos videos</strong></a>
+                    <a href="@Url.Action("Index", "Avaliador")" class="stretched-link text-decoration-none"><i class="fas fa-award fa-fw"></i> <strong>Acesso aos vídeos</strong></a>
                 </div>
             </div>
         </div>
@@ -44,10 +44,10 @@
         @if(perm >= 2) { 
         <div class="col mt-5">
             <div class="card border-0 shadow h-100">
-                <div class="card-header text-white bg-primary">Envie seu video</div>
+                <div class="card-header text-white bg-primary">Envie seu vídeo</div>
                 <div class="card-body ">
                     <p class="card-text" style="text-align: justify;">
-                        Módulo destinado aos professores que desejam ter seu conteúdo/video em nossa plataforma.
+                        Módulo destinado aos professores que desejam ter seu conteúdo/vídeo em nossa plataforma.
                     </p>
                 </div>
                 <div class="card-footer">
@@ -80,7 +80,7 @@
                     </p>
                 </div>
                 <div class="card-footer">
-                    <a href="@Url.Action("Login", "Home")" class="stretched-link text-decoration-none"><i class="fas fa-award fa-fw"></i> <strong>Fazer login</strong></a>
+                    <a href="@Url.Action("Index", "Login")" class="stretched-link text-decoration-none"><i class="fas fa-award fa-fw"></i> <strong>Fazer login</strong></a>
                 </div>
             </div>
         </div>

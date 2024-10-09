@@ -1,12 +1,12 @@
 ﻿@using VideoTeca.Models
 @{
-    ViewBag.Title = "Controle de Videos";
+    ViewBag.Title = "Controle de Vídeos";
     List<area> areas = ViewBag.Areas;
 }
 
 <div class="list-group" style="margin-top: 5px;">
     <span class="list-group-item active">
-        <h3 class="list-group-item-heading" align="center">Listagem de Videos</h3>
+        <h3 class="list-group-item-heading" align="center">Listagem de Vídeos</h3>
     </span>
     <div class="panel panel-primary table-responsive">
     </div>
@@ -193,7 +193,7 @@
            /* alert("Handler for .change() called.");*/
             var area = $('#Area').val();
             var subArea = $('#SubArea').val();
-            var link = '@Url.Action("ListarVideosAjax", "Professor")/?Area=' + area + '&SubArea=' + subArea;
+            var link = '@Url.Action("ListarVideosAjax", "Coordenador")/?Area=' + area + '&SubArea=' + subArea;
             $table.bootstrapTable('refresh', { url: link });
         });
 

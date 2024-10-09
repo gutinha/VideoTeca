@@ -1,0 +1,54 @@
+﻿@using VideoTeca.Models
+@model video
+@{
+    ViewBag.Title = "Ativar Vídeo";
+    Layout = null;
+}
+
+<div class="modal-dialog modal-xl">
+    <div class="modal-content">
+        @using (Html.BeginForm("AtivarVideoModal", "Coordenador", new { id = Model.id }, FormMethod.Post, new { enctype = "multipart/form-data", id = "ativarVideo", autocomplete = "on" }))
+        {
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Ativar Vídeo</h4>
+                <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col ">
+                        <div class="card">
+                            <div class="card-header text-white bg-primary" style="font-size: 28px;">Dados do Vídeo</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="form-group col-lg-7" id="ModelTitulo">
+                                                <label for="NomeVideo" class="control-label">Título:</label>
+                                                <br />
+                                                <input id="NomeVideo" value="@Model.titulo" autocomplete="off" type="text" class="form-control" tabindex="4" disabled="" color: #0c0c0c; />
+                                            </div>
+                                            <div class="form-group col-lg-7" id="ModelDescricao">
+                                                <label for="Descricao" class="control-label">Descrição:</label>
+                                                <br />
+                                                <textarea class="form-control" id="descricao" name="descricao" maxlength="4000" disabled>@Model.descricao</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-danger" id="btnEnvia">
+                    <span class="fas fa-trash-alt fa-w-2"></span>&nbsp;&nbsp;Ativar
+                </button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="fecharBtn">Fechar</button>
+            </div>
+        }
+    </div>
+</div>
