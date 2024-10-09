@@ -11,7 +11,18 @@ VideoTeca é uma plataforma web desenvolvida para gerenciar e catalogar vídeos 
 ## Propósito
 O objetivo principal do VideoTeca é fornecer um sistema estruturado para organizar e gerenciar conteúdo educacional, facilitando para os professores o envio, categorização e também para os alunos e professores, a localização de vídeos relevantes para suas necessidades educacionais.
 
+## Imagens do sistema
+Página inicial
+![image](https://github.com/user-attachments/assets/52d93292-f4fa-48c3-af1b-f1b5fce38c8d)
+Listagem de videos
+![image](https://github.com/user-attachments/assets/b8ed7064-ca6c-43ac-a7c2-493282f45b8a)
+Filtro de permissões por usuário logado e notificações toast
+![image](https://github.com/user-attachments/assets/36cbd5b1-34b0-483c-96f6-dd8b55cdc919)
+Filtros básicos de pesquisa por grupo/nome de usuário no módulo do coordenador do projeto
+![image](https://github.com/user-attachments/assets/2ae2023a-3dda-4acf-b840-82cff1059d9d)
+
 ## Tecnologias Utilizadas
+
 - **Backend**: C# (.NET Framework)
 - **Frontend**: HTML, CSS, JavaScript
 - **Banco de Dados**: Entity Framework e SQL Server para gerenciamento de dados
